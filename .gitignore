@@ -216,3 +216,24 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# Data — do not commit large CSV files
+data/raw/*
+!data/raw/.gitkeep
+
+# Colab & notebooks
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+
+# Credentials
+.env
+kaggle.json
+
+# MLflow & DVC
+mlruns/
+.dvc/
+
+# IDE
+.vscode/
+.idea/
+*.swp

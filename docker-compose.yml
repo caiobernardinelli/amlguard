@@ -1,0 +1,40 @@
+# AMLGuard — Phase 2 skeleton (intentionally not implemented yet).
+#
+# The academic delivery (Projeto Integrador) covers the modelling pipeline in
+# notebooks/01_aml_pipeline.ipynb. This file documents the planned serving
+# stack so the production layer is a concrete roadmap, not a vague TODO.
+#
+# Planned services:
+#   api        — FastAPI scoring service (src/api.py), port 8000
+#   dashboard  — Streamlit alert-triage UI for analysts, port 8501
+#   mlflow     — experiment tracking server, port 5000
+#
+# TODO(Phase 2): write Dockerfile.api and Dockerfile.dashboard, then
+# uncomment below and run `docker compose up`.
+
+# services:
+#   api:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile.api
+#     ports:
+#       - "8000:8000"
+#     volumes:
+#       - ./models:/app/models:ro
+#
+#   dashboard:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile.dashboard
+#     ports:
+#       - "8501:8501"
+#     depends_on:
+#       - api
+#
+#   mlflow:
+#     image: ghcr.io/mlflow/mlflow:latest
+#     command: mlflow server --host 0.0.0.0 --port 5000
+#     ports:
+#       - "5000:5000"
+#     volumes:
+#       - ./mlruns:/mlruns

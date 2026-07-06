@@ -164,7 +164,11 @@ The notebook downloads `HI-Small_Trans.csv` automatically on first run (via `gdo
 Holds **Portuguese (EU) citizenship** — eligible to work in the European Union without a visa.
 
 - GitHub: [@caiobernardinelli](https://github.com/caiobernardinelli)
-- LinkedIn: `https://www.linkedin.com/in/<your-handle>`  ← _replace with your profile URL_
+- LinkedIn: https://www.linkedin.com/in/caio-fl%C3%A1vio-bernardinelli/
+notepad README.md   
+git add README.md
+git commit -m "docs: https://www.linkedin.com/in/caio-fl%C3%A1vio-bernardinelli/"
+git push origin main` 
 
 *Developed as the capstone (Projeto Integrador I) of the Técnico em Inteligência Artificial programme at IFNMG, and maintained as a portfolio project.*
 

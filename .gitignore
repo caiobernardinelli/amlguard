@@ -237,3 +237,6 @@ mlruns/
 .vscode/
 .idea/
 *.swp
+# Generated model artifacts (regenerable; keep the frozen baseline + gitkeep)
+artifacts/*.joblib
+artifacts/model_metadata.json

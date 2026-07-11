@@ -1,7 +1,8 @@
 """Feature engineering for AMLGuard.
 
 Each function mirrors a feature validated in ``notebooks/01_aml_pipeline.ipynb``
-(Section 5) so the Phase-2 FastAPI service can reuse exactly the same logic.
+(Section 5), so the training scripts and the FastAPI service reuse exactly the
+same logic. The set of model inputs is defined once in :mod:`src.config`.
 
 Design rules
 ------------
@@ -16,18 +17,19 @@ from __future__ import annotations
 
 import pandas as pd
 
-#: Exact model inputs selected in notebook Section 5.4.
-MODEL_FEATURES: list[str] = [
-    "Payment Format",
-    "Amount Paid",
-    "sender_previous_tx_count",
-    "is_business_hours",
-    "same_account",
+from src.config import MODEL_FEATURES
+
+__all__ = [
+    "MODEL_FEATURES",
+    "add_temporal_features",
+    "add_same_account_flag",
+    "add_sender_previous_tx_count",
+    "build_model_features",
 ]
 
 
 def add_temporal_features(df: pd.DataFrame) -> pd.DataFrame:
-    """Parse ``Timestamp`` and derive ``Hour`` and ``is_business_hours`` (08:00-18:59)."""
+    """Parse ``Timestamp`` and derive ``Hour`` and ``is_business_hours`` (08:00–18:59)."""
     df = df.copy()
     df["Timestamp"] = pd.to_datetime(df["Timestamp"])
     df["Hour"] = df["Timestamp"].dt.hour

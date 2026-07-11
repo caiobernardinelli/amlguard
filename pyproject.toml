@@ -1,0 +1,39 @@
+[project]
+name = "amlguard"
+version = "0.1.0"
+description = "Anti-money-laundering detection under extreme class imbalance"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Caio Bernardinelli" }]
+dependencies = [
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "scikit-learn>=1.3",
+    "imbalanced-learn>=0.11",
+    "xgboost>=2.0",
+    "joblib>=1.3",
+]
+
+[project.optional-dependencies]
+serve = ["fastapi>=0.110", "uvicorn[standard]>=0.29", "pydantic>=2.0"]
+explain = ["shap>=0.44", "matplotlib>=3.7"]
+dev = ["pytest>=8.0", "ruff>=0.4", "httpx>=0.27"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["src"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

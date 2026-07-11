@@ -1,0 +1,191 @@
+{
+  "_comment": "FROZEN REFERENCE — do not edit by hand. Produced by notebooks/01_aml_pipeline.ipynb (academic delivery). Every refactored script must reproduce these numbers within tolerance. See docs/BASELINE.md.",
+  "meta": {
+    "dataset": "IBM Transactions for Anti-Money Laundering (AML) — HI-Small",
+    "n_transactions": 5078345,
+    "n_laundering": 5177,
+    "positive_rate": 0.001019,
+    "random_state": 42,
+    "split": {
+      "test_size": 0.3,
+      "stratified": true,
+      "test_total": 1523504,
+      "test_laundering": 1553,
+      "test_legitimate": 1521951
+    },
+    "model_features": [
+      "Payment Format",
+      "Amount Paid",
+      "sender_previous_tx_count",
+      "is_business_hours",
+      "same_account"
+    ],
+    "target": "Is Laundering",
+    "primary_metric": "average_precision",
+    "source_notebook": "notebooks/01_aml_pipeline.ipynb"
+  },
+  "final_model": {
+    "name": "XGBoost — Scale Pos Weight",
+    "selection_rule": "recall-maximising model at minimum precision >= 2%",
+    "precision_target": 0.02,
+    "threshold": 0.892163,
+    "metrics": {
+      "average_precision": 0.036833,
+      "accuracy": 0.966187,
+      "precision": 0.020002,
+      "recall": 0.670316,
+      "f1_score": 0.038845,
+      "alerts": 52044,
+      "alert_rate_pct": 3.416072,
+      "true_positives": 1041,
+      "false_positives": 51003,
+      "false_negatives": 512,
+      "true_negatives": 1470948,
+      "alerts_per_true_positive": 49.994236
+    }
+  },
+  "acceptance_gate": {
+    "_comment": "Refactored pipeline must meet these minimums to be considered non-regressive.",
+    "min_average_precision": 0.035,
+    "min_recall_at_2pct_precision": 0.65,
+    "score_reproduction_tolerance": 1e-06
+  },
+  "model_comparison_threshold_0_50": [
+    {
+      "model": "XGBoost — Scale Pos Weight",
+      "average_precision": 0.036833,
+      "precision": 0.008152,
+      "recall": 0.89633,
+      "f1_score": 0.016158,
+      "alerts": 170746,
+      "alert_rate_pct": 11.207453,
+      "true_positives": 1392,
+      "false_positives": 169354,
+      "false_negatives": 161,
+      "true_negatives": 1352597,
+      "fit_seconds": 47.490476,
+      "score_seconds": 7.019623
+    },
+    {
+      "model": "XGBoost — Random Undersampling 1:10",
+      "average_precision": 0.033282,
+      "precision": 0.021854,
+      "recall": 0.602704,
+      "f1_score": 0.042178,
+      "alerts": 42830,
+      "alert_rate_pct": 2.811282,
+      "true_positives": 936,
+      "false_positives": 41894,
+      "false_negatives": 617,
+      "true_negatives": 1480057,
+      "fit_seconds": 1.151802,
+      "score_seconds": 5.857935
+    },
+    {
+      "model": "Random Forest — Balanced Subsample",
+      "average_precision": 0.03251,
+      "precision": 0.014702,
+      "recall": 0.818416,
+      "f1_score": 0.028885,
+      "alerts": 86452,
+      "alert_rate_pct": 5.67455,
+      "true_positives": 1271,
+      "false_positives": 85181,
+      "false_negatives": 282,
+      "true_negatives": 1436770,
+      "fit_seconds": 166.602286,
+      "score_seconds": 3.374419
+    },
+    {
+      "model": "Logistic Regression — Unweighted",
+      "average_precision": 0.009182,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "alerts": 0,
+      "alert_rate_pct": 0.0,
+      "true_positives": 0,
+      "false_positives": 0,
+      "false_negatives": 1553,
+      "true_negatives": 1521951,
+      "fit_seconds": 3.808025,
+      "score_seconds": 0.360627
+    },
+    {
+      "model": "Logistic Regression — Balanced",
+      "average_precision": 0.008381,
+      "precision": 0.007286,
+      "recall": 0.902769,
+      "f1_score": 0.014456,
+      "alerts": 192418,
+      "alert_rate_pct": 12.629964,
+      "true_positives": 1402,
+      "false_positives": 191016,
+      "false_negatives": 151,
+      "true_negatives": 1330935,
+      "fit_seconds": 10.013025,
+      "score_seconds": 0.353585
+    },
+    {
+      "model": "Dummy Classifier",
+      "average_precision": 0.001019,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "alerts": 0,
+      "alert_rate_pct": 0.0,
+      "true_positives": 0,
+      "false_positives": 0,
+      "false_negatives": 1553,
+      "true_negatives": 1521951,
+      "fit_seconds": 0.064209,
+      "score_seconds": 0.004701
+    }
+  ],
+  "best_model_per_precision_target": [
+    {
+      "precision_target": 0.005,
+      "model": "Random Forest — Balanced Subsample",
+      "threshold": 0.026577,
+      "precision": 0.005002,
+      "recall": 0.994205,
+      "alerts": 308677,
+      "true_positives": 1544,
+      "false_positives": 307133,
+      "false_negatives": 9
+    },
+    {
+      "precision_target": 0.01,
+      "model": "Random Forest — Balanced Subsample",
+      "threshold": 0.313334,
+      "precision": 0.010001,
+      "recall": 0.875724,
+      "alerts": 135992,
+      "true_positives": 1360,
+      "false_positives": 134632,
+      "false_negatives": 193
+    },
+    {
+      "precision_target": 0.02,
+      "model": "XGBoost — Scale Pos Weight",
+      "threshold": 0.892163,
+      "precision": 0.020002,
+      "recall": 0.670316,
+      "alerts": 52044,
+      "true_positives": 1041,
+      "false_positives": 51003,
+      "false_negatives": 512
+    },
+    {
+      "precision_target": 0.05,
+      "model": "XGBoost — Scale Pos Weight",
+      "threshold": 0.967236,
+      "precision": 0.050033,
+      "recall": 0.241468,
+      "alerts": 7495,
+      "true_positives": 375,
+      "false_positives": 7120,
+      "false_negatives": 1178
+    }
+  ]
+}

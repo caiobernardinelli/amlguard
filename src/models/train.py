@@ -176,6 +176,11 @@ def evaluate(pipeline: Pipeline, X_test: pd.DataFrame, y_test: pd.Series) -> dic
     tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
     precision = float(precision_score(y_test, y_pred, zero_division=0))
     recall = float(recall_score(y_test, y_pred, zero_division=0))
+    accuracy = float((tp + tn) / (tp + tn + fp + fn))
+    f1_score = (
+        float(2 * precision * recall / (precision + recall))
+        if (precision + recall) > 0 else 0.0
+    )
     n_alerts = int(y_pred.sum())
 
     return {
@@ -185,8 +190,10 @@ def evaluate(pipeline: Pipeline, X_test: pd.DataFrame, y_test: pd.Series) -> dic
             "precision_target": FINAL_PRECISION_TARGET,
             "precision_target_reached": reached,
             "threshold": threshold,
+            "accuracy": accuracy,
             "precision": precision,
             "recall": recall,
+            "f1_score": f1_score,
             "alerts": n_alerts,
             "alert_rate_pct": 100.0 * n_alerts / len(y_test),
             "true_positives": int(tp),
@@ -209,6 +216,41 @@ def _git_commit() -> str:
         return "unknown"
 
 
+def prepare_train_test_split(
+    df: pd.DataFrame,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+    """Deterministic (X_train, X_test, y_train, y_test) from a raw DataFrame.
+
+    Sorts by ``Timestamp`` first (matching ``build_model_features``' internal
+    sort) so that features and target come from identically-ordered rows,
+    then stratified-splits with ``config.TEST_SIZE`` and ``config.RANDOM_STATE``.
+
+    Both ``train.py`` and ``evaluate.py`` call this so their test sets are
+    guaranteed to be identical row-by-row: any comparison against
+    ``baseline_metrics.json`` is only meaningful if the test set matches.
+    """
+    df = df.sort_values("Timestamp", kind="mergesort").reset_index(drop=True)
+
+    features = build_model_features(df).reset_index(drop=True)
+    y = df[TARGET].astype("int8").reset_index(drop=True)
+
+    # Defensive: features and target must have identical length and
+    # the same total number of positives as the raw df.
+    assert len(features) == len(y), (
+        f"feature/target length mismatch: {len(features)} vs {len(y)}"
+    )
+    assert int(y.sum()) == int(df[TARGET].sum()), (
+        "target sum drifted between raw df and post-sort extraction"
+    )
+
+    return train_test_split(
+        features, y,
+        test_size=TEST_SIZE,
+        random_state=RANDOM_STATE,
+        stratify=y,
+    )
+
+
 def train_model(
     df: pd.DataFrame,
     save_artifacts: bool = True,
@@ -228,35 +270,8 @@ def train_model(
     -------
     (fitted_pipeline, metadata_dict)
     """
-    # CRITICAL: build_model_features() sorts rows by Timestamp so that
-    # sender_previous_tx_count can be computed as a leakage-safe cumcount.
-    # If we extracted `y` from the ORIGINAL df ordering, we would be
-    # pairing each transaction's features with a different transaction's
-    # label -- a silent misalignment that collapses AP to the base rate.
-    # Apply the same sort here first so features and target come from
-    # identically-ordered rows. The sort inside build_model_features is
-    # idempotent on already-sorted input.
-    df = df.sort_values("Timestamp", kind="mergesort").reset_index(drop=True)
-
-    logger.info("Building features on %d rows", len(df))
-    features = build_model_features(df).reset_index(drop=True)
-    y = df[TARGET].astype("int8").reset_index(drop=True)
-
-    # Defensive check: features and target must have identical length and
-    # the label counts must match the raw df.
-    assert len(features) == len(y), (
-        f"feature/target length mismatch: {len(features)} vs {len(y)}"
-    )
-    assert int(y.sum()) == int(df[TARGET].sum()), (
-        "target sum drifted between raw df and post-sort extraction"
-    )
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        features, y,
-        test_size=TEST_SIZE,
-        random_state=RANDOM_STATE,
-        stratify=y,
-    )
+    logger.info("Preparing train/test split on %d rows", len(df))
+    X_train, X_test, y_train, y_test = prepare_train_test_split(df)
     logger.info("Split: train=%d, test=%d", len(X_train), len(X_test))
 
     negative = int((y_train == 0).sum())
@@ -302,7 +317,7 @@ def train_model(
         "n_train_negative": negative,
         "scale_pos_weight": scale_pos_weight,
         "hyperparameters": XGBOOST_PARAMS,
-        "features": list(features.columns),
+        "features": list(X_train.columns),
         "target": TARGET,
         "metrics": metrics,
         "baseline_gate": {

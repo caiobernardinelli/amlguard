@@ -61,14 +61,12 @@ def add_sender_previous_tx_count(df: pd.DataFrame) -> pd.DataFrame:
 def build_model_features(df: pd.DataFrame) -> pd.DataFrame:
     """Apply the full feature chain and return exactly ``MODEL_FEATURES``.
 
-    Expects the raw IBM AML transaction schema (HI-Small). Timestamp parsing
-    happens inside :func:`add_temporal_features`, so raw CSV input is fine.
+    Output dtypes match the notebook byte-for-byte -- no downcasts, no dtype
+    coercion beyond what individual ``add_*`` helpers already impose. Any
+    dtype change here would silently diverge from ``artifacts/baseline_metrics.json``.
+    Downstream scikit-learn pipelines handle encoding and scaling.
     """
     df = add_temporal_features(df)
     df = add_same_account_flag(df)
     df = add_sender_previous_tx_count(df)
-
-    out = df[MODEL_FEATURES].copy()
-    out["Payment Format"] = out["Payment Format"].astype("category")
-    out["Amount Paid"] = out["Amount Paid"].astype("float32")
-    return out
+    return df[MODEL_FEATURES].copy()

@@ -67,6 +67,26 @@ MODEL_FEATURES: list[str] = (
 )
 
 # --------------------------------------------------------------------------- #
+# XGBoost hyperparameters — frozen from notebook Section 7
+# (cell 55 of notebooks/01_aml_pipeline.ipynb: "XGBoost — Scale Pos Weight").
+# Any change here requires re-running scripts/verify_train_determinism.py and
+# the full-CSV training, then comparing metrics against baseline_metrics.json.
+# --------------------------------------------------------------------------- #
+XGBOOST_PARAMS: dict = {
+    "n_estimators": 200,
+    "max_depth": 6,
+    "learning_rate": 0.08,
+    "min_child_weight": 10,
+    "subsample": 0.80,
+    "colsample_bytree": 0.80,
+    "objective": "binary:logistic",
+    "eval_metric": "aucpr",
+    "tree_method": "hist",
+    "n_jobs": -1,
+    "random_state": RANDOM_STATE,
+}
+
+# --------------------------------------------------------------------------- #
 # Selected-model contract (frozen from the validated baseline)
 # See artifacts/baseline_metrics.json and docs/BASELINE.md.
 # --------------------------------------------------------------------------- #

@@ -237,6 +237,10 @@ mlruns/
 .vscode/
 .idea/
 *.swp
-# Generated model artifacts (regenerable; keep the frozen baseline + gitkeep)
-artifacts/*.joblib
-artifacts/model_metadata.json
+# Generated model artifacts (regenerable; keep only the frozen baseline)
+artifacts/*
+!artifacts/.gitkeep
+!artifacts/baseline_metrics.json
+
+# Bootstrap scripts (temporary delivery mechanism; not part of the codebase)
+apply_day*.py

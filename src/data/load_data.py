@@ -89,7 +89,7 @@ def validate_schema(df: pd.DataFrame) -> None:
 
     # 2. Target column must be strictly binary (0/1).
     target_values = set(pd.unique(df[TARGET].dropna()))
-    unexpected = target_values - {0, 1, 0.0, 1.0}
+    unexpected = target_values - {0, 1}
     if unexpected:
         raise SchemaValidationError(
             f"Column '{TARGET}' must contain only 0/1, "

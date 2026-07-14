@@ -120,3 +120,191 @@ def test_openapi_schema_available(client_with_model):
     paths = schema["paths"]
     assert "/health" in paths
     assert "/model-info" in paths
+
+# === AMLGUARD DAY 9 TESTS START ===
+DAY9_VALID_TRANSACTION = {
+    "payment_format": "ACH",
+    "amount_paid": 13701.30,
+    "sender_previous_tx_count": 238,
+    "is_business_hours": 0,
+    "same_account": 0,
+}
+
+DAY9_ALIAS_TRANSACTION = {
+    "Payment Format": "ACH",
+    "Amount Paid": 13701.30,
+    "sender_previous_tx_count": 238,
+    "is_business_hours": 0,
+    "same_account": 0,
+}
+
+DAY9_RESPONSE_FIELDS = {
+    "risk_score",
+    "is_alert",
+    "threshold",
+    "model_version",
+}
+
+
+def _assert_day9_prediction_shape(payload: dict[str, object]) -> None:
+    assert set(payload) == DAY9_RESPONSE_FIELDS
+    assert 0.0 <= payload["risk_score"] <= 1.0
+    assert isinstance(payload["is_alert"], bool)
+    assert 0.0 <= payload["threshold"] <= 1.0
+    assert isinstance(payload["model_version"], str)
+    assert payload["model_version"]
+    assert payload["is_alert"] is (
+        payload["risk_score"] >= payload["threshold"]
+    )
+
+
+def test_day9_predict_returns_valid_response(client_with_model):
+    response = client_with_model.post(
+        "/predict",
+        json=DAY9_VALID_TRANSACTION,
+    )
+
+    assert response.status_code == 200
+    _assert_day9_prediction_shape(response.json())
+
+
+def test_day9_predict_accepts_public_and_model_aliases(client_with_model):
+    snake_case_response = client_with_model.post(
+        "/predict",
+        json=DAY9_VALID_TRANSACTION,
+    )
+    alias_response = client_with_model.post(
+        "/predict",
+        json=DAY9_ALIAS_TRANSACTION,
+    )
+
+    assert snake_case_response.status_code == 200
+    assert alias_response.status_code == 200
+    assert snake_case_response.json() == alias_response.json()
+
+
+def test_day9_predict_rejects_missing_field(client_with_model):
+    payload = DAY9_VALID_TRANSACTION.copy()
+    payload.pop("amount_paid")
+
+    response = client_with_model.post("/predict", json=payload)
+
+    assert response.status_code == 422
+
+
+def test_day9_predict_rejects_wrong_type(client_with_model):
+    payload = {
+        **DAY9_VALID_TRANSACTION,
+        "amount_paid": {"not": "a number"},
+    }
+
+    response = client_with_model.post("/predict", json=payload)
+
+    assert response.status_code == 422
+
+
+def test_day9_predict_rejects_invalid_business_hours(client_with_model):
+    payload = {
+        **DAY9_VALID_TRANSACTION,
+        "is_business_hours": 2,
+    }
+
+    response = client_with_model.post("/predict", json=payload)
+
+    assert response.status_code == 422
+
+
+def test_day9_predict_rejects_negative_amount(client_with_model):
+    payload = {
+        **DAY9_VALID_TRANSACTION,
+        "amount_paid": -1,
+    }
+
+    response = client_with_model.post("/predict", json=payload)
+
+    assert response.status_code == 422
+
+
+def test_day9_predict_returns_503_without_model(client_without_model):
+    response = client_without_model.post(
+        "/predict",
+        json=DAY9_VALID_TRANSACTION,
+    )
+
+    assert response.status_code == 503
+
+
+def test_day9_predict_batch_preserves_order(client_with_model):
+    transactions = [
+        DAY9_VALID_TRANSACTION,
+        {
+            **DAY9_VALID_TRANSACTION,
+            "payment_format": "Wire",
+            "amount_paid": 250.0,
+            "sender_previous_tx_count": 2,
+        },
+        {
+            **DAY9_VALID_TRANSACTION,
+            "payment_format": "Credit Card",
+            "amount_paid": 50.0,
+            "sender_previous_tx_count": 0,
+            "same_account": 1,
+        },
+    ]
+
+    expected = [
+        client_with_model.post("/predict", json=item).json()
+        for item in transactions
+    ]
+    response = client_with_model.post(
+        "/predict-batch",
+        json=transactions,
+    )
+
+    assert response.status_code == 200
+    assert response.json() == expected
+    assert len(response.json()) == len(transactions)
+
+
+def test_day9_predict_batch_accepts_empty_list(client_with_model):
+    response = client_with_model.post("/predict-batch", json=[])
+
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+def test_day9_predict_batch_rejects_more_than_1000_items(
+    client_with_model,
+):
+    response = client_with_model.post(
+        "/predict-batch",
+        json=[DAY9_VALID_TRANSACTION] * 1001,
+    )
+
+    assert response.status_code == 422
+
+
+def test_day9_predict_batch_rejects_one_invalid_item(client_with_model):
+    invalid_transaction = {
+        **DAY9_VALID_TRANSACTION,
+        "same_account": 2,
+    }
+
+    response = client_with_model.post(
+        "/predict-batch",
+        json=[DAY9_VALID_TRANSACTION, invalid_transaction],
+    )
+
+    assert response.status_code == 422
+
+
+def test_day9_predict_batch_returns_503_without_model(
+    client_without_model,
+):
+    response = client_without_model.post(
+        "/predict-batch",
+        json=[DAY9_VALID_TRANSACTION],
+    )
+
+    assert response.status_code == 503
+# === AMLGUARD DAY 9 TESTS END ===

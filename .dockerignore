@@ -1,0 +1,55 @@
+# Everything not needed at runtime is excluded from the Docker build context.
+# This makes `docker build` faster (smaller context sent to the daemon) and
+# keeps the final image lean.
+
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Python caches and virtualenvs
+__pycache__
+*.py[cod]
+*$py.class
+.pytest_cache
+.ruff_cache
+.mypy_cache
+.venv
+venv
+env
+
+# Data and generated artifacts (mounted or produced at runtime instead)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+artifacts/model.joblib
+artifacts/model_metadata.json
+artifacts/metrics.json
+
+# Notebooks and their assets - not part of the serving image
+notebooks
+assets
+
+# Repo documentation and delivery scripts
+README.md
+LICENSE
+docs
+apply_day*.py
+scripts
+
+# Editor / OS noise
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# Docker's own files
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Tests are not shipped with production images
+tests
+
+# CI configuration
+.github

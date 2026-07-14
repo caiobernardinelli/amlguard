@@ -1,40 +1,33 @@
-# AMLGuard — Phase 2 skeleton (intentionally not implemented yet).
+# AMLGuard - local development orchestration
 #
-# The academic delivery (Projeto Integrador) covers the modelling pipeline in
-# notebooks/01_aml_pipeline.ipynb. This file documents the planned serving
-# stack so the production layer is a concrete roadmap, not a vague TODO.
+# `docker compose up`        build (if needed) and run the API on http://localhost:8000
+# `docker compose up --build` force a rebuild before running
+# `docker compose down`      stop the container
 #
-# Planned services:
-#   api        — FastAPI scoring service (src/api.py), port 8000
-#   dashboard  — Streamlit alert-triage UI for analysts, port 8501
-#   mlflow     — experiment tracking server, port 5000
-#
-# TODO(Phase 2): write Dockerfile.api and Dockerfile.dashboard, then
-# uncomment below and run `docker compose up`.
+# The model artifact is bind-mounted from ./artifacts/model.joblib so the same
+# image can score with a freshly retrained model without a rebuild. If the file
+# does not exist yet, run `python -m src.models.train` locally first.
 
-# services:
-#   api:
-#     build:
-#       context: .
-#       dockerfile: Dockerfile.api
-#     ports:
-#       - "8000:8000"
-#     volumes:
-#       - ./models:/app/models:ro
-#
-#   dashboard:
-#     build:
-#       context: .
-#       dockerfile: Dockerfile.dashboard
-#     ports:
-#       - "8501:8501"
-#     depends_on:
-#       - api
-#
-#   mlflow:
-#     image: ghcr.io/mlflow/mlflow:latest
-#     command: mlflow server --host 0.0.0.0 --port 5000
-#     ports:
-#       - "5000:5000"
-#     volumes:
-#       - ./mlruns:/mlruns
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: amlguard:latest
+    container_name: amlguard-api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Read-only mount of the trained model. Comment out to start without a
+      # model (useful for exploring /health and /docs while training runs).
+      - ./artifacts/model.joblib:/app/artifacts/model.joblib:ro
+    restart: unless-stopped
+    healthcheck:
+      # Reuses the container's own HEALTHCHECK defined in the Dockerfile; this
+      # entry exists so `docker compose ps` reports the health status column.
+      test: ["CMD", "python", "-c",
+             "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status == 200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

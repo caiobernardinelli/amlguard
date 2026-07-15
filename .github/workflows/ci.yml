@@ -70,3 +70,65 @@ jobs:
         with:
           dockerfile: Dockerfile
           failure-threshold: warning
+
+  # === AMLGUARD DAY 12 START ===
+  publish-image:
+    name: Publish image to GHCR
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - python-checks
+      - dockerfile-lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract image metadata
+        id: metadata
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=latest
+            type=ref,event=branch
+            type=sha,format=long
+          labels: |
+            org.opencontainers.image.title=AMLGuard API
+            org.opencontainers.image.description=AML risk-scoring API for extreme class imbalance
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.licenses=MIT
+
+      - name: Build and push image
+        id: build-and-push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Publish summary
+        run: |
+          echo "### AMLGuard container published" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Registry: ghcr.io" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Image: ghcr.io/${{ github.repository }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Digest: ${{ steps.build-and-push.outputs.digest }}" >> "$GITHUB_STEP_SUMMARY"
+  # === AMLGUARD DAY 12 END ===

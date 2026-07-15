@@ -2,6 +2,7 @@
 
 **End-to-end machine-learning pipeline for financial-crime / fraud detection on a highly imbalanced transaction dataset (~0.1% illicit).** Built with Python, scikit-learn, XGBoost, imbalanced-learn and SHAP, and evaluated the way a production compliance team actually operates — by *alert budget* and *recall at a fixed precision*, not by accuracy.
 
+![CI](https://github.com/caiobernardinelli/amlguard/actions/workflows/ci.yml/badge.svg)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3%2B-orange)
 ![XGBoost](https://img.shields.io/badge/XGBoost-2.0%2B-brightgreen)

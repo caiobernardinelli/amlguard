@@ -1,0 +1,72 @@
+name: CI
+
+# Every push and every pull request against main triggers verification.
+# Combined with branch protection, this makes it impossible to merge code
+# that does not pass the same checks Caio runs locally.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Never run two jobs from the same branch in parallel: newer pushes cancel
+# older in-flight runs. Saves free-tier minutes and gives faster feedback.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ---------------------------------------------------------------------- #
+  # Job 1: Python code quality + tests. Everything needed to reproduce
+  # `ruff check` and `pytest` locally, but in a clean Ubuntu environment.
+  # ---------------------------------------------------------------------- #
+  python-checks:
+    name: Ruff and pytest (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install project with serve and dev extras
+        run: |
+          python -m pip install --upgrade pip
+          # pyproject.toml is the source of truth for dependencies.
+          # `-e` makes `src` importable; extras pull in fastapi/pydantic
+          # (needed by test_api.py) and pytest/ruff/httpx (needed by the
+          # suite itself).
+          pip install -e ".[serve,dev]"
+
+      - name: Ruff — style and static checks
+        run: ruff check src/ tests/
+
+      - name: Pytest — full acceptance suite
+        run: pytest -v
+
+  # ---------------------------------------------------------------------- #
+  # Job 2: Dockerfile static analysis. Independent from the Python job
+  # so a bad Dockerfile does not hide test failures and vice versa.
+  # ---------------------------------------------------------------------- #
+  dockerfile-lint:
+    name: Hadolint (Dockerfile)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Lint Dockerfile with hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+          failure-threshold: warning

@@ -34,6 +34,14 @@ MLFLOW_ARTIFACTS_DIR: Path = PROJECT_ROOT / "mlartifacts"
 MLFLOW_EXPERIMENT_NAME: str = "AMLGuard"
 # === AMLGUARD DAY 13 END ===
 
+# === AMLGUARD DAY 14 START ===
+MLFLOW_REGISTERED_MODEL_NAME: str = "AMLGuard"
+MLFLOW_MODEL_ARTIFACT_NAME: str = "amlguard_model"
+MLFLOW_CANDIDATE_ALIAS: str = "candidate"
+MLFLOW_CHAMPION_ALIAS: str = "champion"
+MLFLOW_MODEL_INFO_PATH: Path = ARTIFACTS_DIR / "mlflow_model_info.json"
+# === AMLGUARD DAY 14 END ===
+
 # Runtime download fallback for the raw CSV (~476 MB, not committed).
 # Mirrors the notebook's Section 2 loader.
 RAW_CSV_GDRIVE_ID: str = "1359N_tsRuUtCFMWCV6BtHjDdF280rb8e"

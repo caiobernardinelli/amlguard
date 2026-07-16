@@ -244,3 +244,11 @@ artifacts/*
 
 # Bootstrap scripts (temporary delivery mechanism; not part of the codebase)
 apply_day*.py
+
+# MLflow local tracking
+mlartifacts/
+
+# MLflow SQLite backend and local artifacts
+mlflow.db
+mlflow.db-shm
+mlflow.db-wal

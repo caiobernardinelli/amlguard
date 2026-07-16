@@ -76,6 +76,7 @@ from src.config import (
 )
 from src.data.load_data import load_raw_transactions
 from src.features import build_model_features
+from src.models.tracking import log_training_run
 
 logger = logging.getLogger(__name__)
 
@@ -254,6 +255,7 @@ def prepare_train_test_split(
 def train_model(
     df: pd.DataFrame,
     save_artifacts: bool = True,
+    track_experiment: bool = False,
 ) -> tuple[Pipeline, dict]:
     """End-to-end: features -> stratified split -> fit -> evaluate.
 
@@ -265,11 +267,19 @@ def train_model(
         When True, writes ``artifacts/model.joblib`` and
         ``artifacts/model_metadata.json``. Set to False for smoke tests
         and the determinism check.
+    track_experiment
+        When True, logs the completed run to MLflow. Tracking requires ``save_artifacts=True``.
 
     Returns
     -------
     (fitted_pipeline, metadata_dict)
     """
+    # === AMLGUARD DAY 13 VALIDATION ===
+    if track_experiment and not save_artifacts:
+        raise ValueError(
+            "MLflow tracking requires save_artifacts=True."
+        )
+
     logger.info("Preparing train/test split on %d rows", len(df))
     X_train, X_test, y_train, y_test = prepare_train_test_split(df)
     logger.info("Split: train=%d, test=%d", len(X_train), len(X_test))
@@ -339,6 +349,17 @@ def train_model(
         MODEL_METADATA_PATH.write_text(json.dumps(metadata, indent=2))
         logger.info("Wrote %s", MODEL_METADATA_PATH)
 
+    # === AMLGUARD DAY 13 TRACKING START ===
+    if track_experiment:
+        run_id = log_training_run(metadata)
+        metadata["mlflow_run_id"] = run_id
+        MODEL_METADATA_PATH.write_text(
+            json.dumps(metadata, indent=2),
+            encoding="utf-8",
+        )
+        logger.info("Logged MLflow run %s", run_id)
+    # === AMLGUARD DAY 13 TRACKING END ===
+
     return pipeline, metadata
 
 
@@ -369,12 +390,24 @@ def main() -> int:
         "--no-save", action="store_true",
         help="fit and evaluate without writing artifacts",
     )
+    parser.add_argument(
+        "--track",
+        action="store_true",
+        help="log the completed persisted training run to MLflow",
+    )
     args = parser.parse_args()
+
+    if args.no_save and args.track:
+        parser.error("--track cannot be combined with --no-save")
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
 
     df = load_raw_transactions()
-    _, metadata = train_model(df, save_artifacts=not args.no_save)
+    _, metadata = train_model(
+        df,
+        save_artifacts=not args.no_save,
+        track_experiment=args.track,
+    )
     _summarise(metadata)
 
     return 0 if metadata["baseline_gate"]["status"] == "PASS" else 1

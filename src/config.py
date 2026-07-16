@@ -28,6 +28,12 @@ MODEL_PATH: Path = ARTIFACTS_DIR / "model.joblib"
 MODEL_METADATA_PATH: Path = ARTIFACTS_DIR / "model_metadata.json"
 BASELINE_METRICS_PATH: Path = ARTIFACTS_DIR / "baseline_metrics.json"
 
+# === AMLGUARD DAY 13 START ===
+MLFLOW_DB_PATH: Path = PROJECT_ROOT / "mlflow.db"
+MLFLOW_ARTIFACTS_DIR: Path = PROJECT_ROOT / "mlartifacts"
+MLFLOW_EXPERIMENT_NAME: str = "AMLGuard"
+# === AMLGUARD DAY 13 END ===
+
 # Runtime download fallback for the raw CSV (~476 MB, not committed).
 # Mirrors the notebook's Section 2 loader.
 RAW_CSV_GDRIVE_ID: str = "1359N_tsRuUtCFMWCV6BtHjDdF280rb8e"

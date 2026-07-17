@@ -1,0 +1,12 @@
+$schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
+name: amlguard-training
+version: "1"
+description: >-
+  Reproducible CPU environment for AMLGuard data validation and model training.
+image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04:latest
+conda_file: conda.yml
+tags:
+  project: AMLGuard
+  environment: dev
+  purpose: training
+  python: "3.12"

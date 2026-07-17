@@ -1,0 +1,15 @@
+$schema: https://azuremlschemas.azureedge.net/latest/data.schema.json
+name: ibm-aml-hi-small
+version: "1"
+type: uri_file
+path: ../../../data/raw/HI-Small_Trans.csv
+description: >-
+  IBM AML HI-Small synthetic transaction dataset used by AMLGuard.
+  Version 1 is pinned by file size and SHA-256 in the project documentation.
+tags:
+  project: AMLGuard
+  environment: dev
+  source: IBM
+  dataset: HI-Small
+  synthetic: "true"
+  sha256: b19d39f515523373f991b689c07e11e7b0b95c17a2c27a87d91584ae16c5b040

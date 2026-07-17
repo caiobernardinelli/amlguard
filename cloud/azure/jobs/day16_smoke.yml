@@ -1,0 +1,25 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+display_name: amlguard-day16-data-environment-smoke
+experiment_name: amlguard-cloud-foundation
+description: >-
+  Serverless smoke test that downloads the registered Data Asset, imports the
+  AMLGuard project, validates the schema, and verifies the dataset SHA-256.
+code: ../../..
+command: >-
+  python -m cloud.azure.jobs.smoke_test
+  --data-path ${{inputs.transactions}}
+  --output-path ${{outputs.evidence}}/day16_smoke_summary.json
+environment: azureml:amlguard-training:1
+inputs:
+  transactions:
+    type: uri_file
+    path: azureml:ibm-aml-hi-small:1
+    mode: download
+outputs:
+  evidence:
+    type: uri_folder
+tags:
+  project: AMLGuard
+  environment: dev
+  phase: day16
+  purpose: smoke-test

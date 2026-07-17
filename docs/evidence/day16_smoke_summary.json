@@ -1,0 +1,28 @@
+{
+  "day": 16,
+  "cloud_provider": "Azure Machine Learning",
+  "job_name": "happy_bone_n2gm2r19qz",
+  "job_status": "Completed",
+  "status": "PASS",
+  "data_asset": "azureml:ibm-aml-hi-small:1",
+  "environment": "azureml:amlguard-training:1",
+  "file_name": "HI-Small_Trans.csv",
+  "size_bytes": 475664283,
+  "sha256": "b19d39f515523373f991b689c07e11e7b0b95c17a2c27a87d91584ae16c5b040",
+  "sample_rows_validated": 1000,
+  "required_columns": [
+    "Timestamp",
+    "From Bank",
+    "Account",
+    "To Bank",
+    "Account.1",
+    "Amount Received",
+    "Receiving Currency",
+    "Amount Paid",
+    "Payment Currency",
+    "Payment Format",
+    "Is Laundering"
+  ],
+  "project_import": "PASS",
+  "schema_validation": "PASS"
+}

@@ -9,7 +9,7 @@
 ![SHAP](https://img.shields.io/badge/Explainability-SHAP-purple)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-> **Skills demonstrated:** fraud detection · anomaly detection · imbalanced classification · precision–recall / PR-AUC (Average Precision) · feature engineering · data-leakage prevention · threshold tuning · cost-sensitive learning · XGBoost · Random Forest · Logistic Regression · SHAP explainability · model evaluation · FastAPI scoring skeleton · MLOps roadmap (Docker · MLflow · DVC).
+> **Skills demonstrated:** fraud detection · anomaly detection · imbalanced classification · precision–recall / PR-AUC (Average Precision) · feature engineering · data-leakage prevention · threshold tuning · cost-sensitive learning · XGBoost · Random Forest · Logistic Regression · SHAP explainability · model evaluation · **FastAPI + Pydantic serving** · **Docker (multi-stage, GHCR)** · **CI/CD (GitHub Actions)** · **MLflow tracking & model registry** · **Azure ML pipelines** · pytest (56 tests) · reproducibility engineering.
 
 ---
 
@@ -96,22 +96,66 @@ Global feature contributions for the selected XGBoost model. Explanations improv
 
 ---
 
+## Production architecture (Phase 2 — delivered)
+
+The academic notebook was refactored into a tested, containerised, cloud-validated service over a 17-day MLOps schedule. Every step is gated against the frozen baseline in [`artifacts/baseline_metrics.json`](./artifacts/baseline_metrics.json): a refactor is only accepted if it reproduces the validated metrics.
+
+| Layer | What exists | Proof |
+|---|---|---|
+| **Package + tests** | `src/` package (data, features, models, api) with **56 pytest tests**, synthetic fixtures (no CSV needed in CI) | `pytest` → 56 passed; `ruff` clean |
+| **Serving** | FastAPI app: `/health`, `/model-info`, `/predict`, `/predict-batch` with Pydantic validation and in-process model cache | Interactive docs at `/docs` |
+| **Container** | Multi-stage Dockerfile (671 MB), non-root user, HEALTHCHECK; `docker compose up` for one-command boot | `hadolint` clean |
+| **CI/CD** | GitHub Actions: ruff + pytest + hadolint on every push; Docker image built and pushed to GHCR on `main` | CI badge above; [Actions history](https://github.com/caiobernardinelli/amlguard/actions) |
+| **Model registry** | MLflow tracking (SQLite backend) + PyFunc-packaged model with `candidate` / `champion` aliases and a documented promotion flow | [`docs/MODEL_PROMOTION.md`](./docs/MODEL_PROMOTION.md) |
+| **Cloud** | Azure ML workspace, versioned data asset, reusable command components (prepare / train / evaluate) and pipeline jobs | [`docs/AZURE_COMPONENTS.md`](./docs/AZURE_COMPONENTS.md) |
+
+**Reproducibility, proven in the cloud:** the Azure ML pipeline retrained and re-evaluated the model on Azure compute and reproduced the frozen baseline exactly — Average Precision `0.036833` in the cloud vs `0.036833` frozen locally ([evidence](./docs/evidence/day17_evaluation_metrics.json)). Same seed, same config, different OS and hardware, identical result.
+
+### Run the service without installing anything (Docker)
+
+```bash
+# Pull the published image from GitHub Container Registry
+docker pull ghcr.io/caiobernardinelli/amlguard:latest
+
+# Boot it (no model mounted: /health and /docs work; /predict returns 503)
+docker run --rm -p 8000:8000 ghcr.io/caiobernardinelli/amlguard:latest
+
+# Then open http://localhost:8000/docs
+```
+
+To score transactions, train a model first (`python -m src.models.train`) and boot via compose, which bind-mounts it:
+
+```bash
+docker compose up   # http://localhost:8000/docs → try POST /predict
+```
+
+---
+
 ## Repository structure
 
 ```
 amlguard/
 ├── notebooks/
-│   └── 01_aml_pipeline.ipynb     # full pipeline — Sections 1–9 (EDA → modelling → SHAP → conclusion)
+│   └── 01_aml_pipeline.ipynb        # Phase 1 — full academic pipeline (EDA → models → SHAP)
 ├── src/
-│   ├── features.py               # leakage-safe feature functions (reusable by the API)
-│   └── api.py                    # FastAPI scoring skeleton (Phase 2)
-├── assets/                       # figures used in this README
-├── data/
-│   └── raw/                      # HI-Small_Trans.csv is git-ignored (476 MB; fetched at runtime)
-├── docker-compose.yml            # Phase 2 serving stack (documented skeleton)
-├── requirements.txt
-├── .gitignore
-└── README.md
+│   ├── config.py                    # single source of truth: paths, seed, features, gates
+│   ├── data/load_data.py            # schema-validated CSV loader
+│   ├── features/build_features.py   # leakage-safe features (byte-parity with the notebook)
+│   ├── models/
+│   │   ├── train.py                 # reproducible training (deterministic artifacts)
+│   │   ├── evaluate.py              # dual regression gates vs frozen baseline
+│   │   ├── predict.py               # unified prediction contract + model cache
+│   │   ├── tracking.py              # MLflow experiment tracking
+│   │   └── mlflow_model.py          # PyFunc packaging + candidate/champion aliases
+│   └── api/main.py                  # FastAPI: /health /model-info /predict /predict-batch
+├── tests/                           # 56 tests, CSV-free (synthetic fixtures)
+├── cloud/azure/                     # Azure ML: components, environment, data asset, jobs
+├── artifacts/baseline_metrics.json  # FROZEN baseline — the regression guard
+├── docs/                            # baseline, Azure, model-promotion docs + run evidence
+├── Dockerfile                       # multi-stage build (671 MB runtime image)
+├── docker-compose.yml               # one-command local boot with model bind-mount
+├── .github/workflows/ci.yml         # ruff + pytest + hadolint + GHCR publish
+└── pyproject.toml
 ```
 
 ---
@@ -123,15 +167,26 @@ amlguard/
 git clone https://github.com/caiobernardinelli/amlguard.git
 cd amlguard
 
-# 2. Environment
+# 2. Environment (Python 3.10+)
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+pip install -e ".[serve,dev]"
 
-# 3. Run the notebook
+# 3. Verify the refactored pipeline (no dataset needed — fixtures are synthetic)
+pytest            # expected: 56 passed
+ruff check src/ tests/
+
+# 4. Full training on the real dataset (downloads the 476 MB CSV on first run)
+python -m src.models.train        # writes artifacts/model.joblib, gate must PASS
+python -m src.models.evaluate     # compares against the frozen baseline
+
+# 5. Serve it
+uvicorn src.api.main:app --reload # http://127.0.0.1:8000/docs
+
+# (Phase 1 notebook, if you want the full analysis)
 jupyter lab notebooks/01_aml_pipeline.ipynb
 ```
 
-The notebook downloads `HI-Small_Trans.csv` automatically on first run (via `gdown`); the raw CSV is intentionally **not** committed. For a clean top-to-bottom run, use **Kernel → Restart & Run All** (the notebook is ordered to reproduce every result from scratch).
+The raw CSV is intentionally **not** committed; the loader fetches it at runtime. For a clean notebook run, use **Kernel → Restart & Run All**.
 
 ---
 
@@ -144,7 +199,9 @@ The notebook downloads `HI-Small_Trans.csv` automatically on first run (via `gdo
 
 ---
 
-## Roadmap (Phase 2)
+## Roadmap (modelling improvements)
+
+The MLOps serving stack (FastAPI · Docker/GHCR · CI/CD · MLflow · Azure ML) is **delivered** — see [Production architecture](#production-architecture-phase-2--delivered). What remains on the roadmap is model-science work:
 
 | Priority | Improvement | Value |
 |---|---|---|
@@ -155,7 +212,7 @@ The notebook downloads `HI-Small_Trans.csv` automatically on first run (via `gdo
 | 5 | Sensitivity analysis without `same_account` | Quantify dependence on a possibly confounded signal |
 | 6 | SMOTENC / cost-sensitive comparison | Category-aware resampling |
 | 7 | Probability calibration | Stable, interpretable risk scores |
-| 8 | Serving stack: **FastAPI + Docker + MLflow + DVC** + Streamlit triage UI | Deployable, tracked, reproducible pipeline |
+| 8 | Streamlit triage UI + monitoring dashboards | Analyst-facing layer on top of the API |
 
 ---
 

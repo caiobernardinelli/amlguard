@@ -1,0 +1,91 @@
+{
+  "status": "PASS",
+  "evaluated_at_utc": "2026-07-18T20:07:23.741809+00:00",
+  "n_test": 1523504,
+  "metrics": {
+    "average_precision": 0.036833405987508866,
+    "max_achievable_precision": 1.0,
+    "operating_point": {
+      "precision_target": 0.02,
+      "precision_target_reached": true,
+      "threshold": 0.8921634554862976,
+      "accuracy": 0.9661865016435796,
+      "precision": 0.02000230574129583,
+      "recall": 0.6703155183515775,
+      "f1_score": 0.03884545776815867,
+      "alerts": 52044,
+      "alert_rate_pct": 3.4160724225207155,
+      "true_positives": 1041,
+      "false_positives": 51003,
+      "false_negatives": 512,
+      "true_negatives": 1470948
+    }
+  },
+  "quality_gate": {
+    "status": "PASS",
+    "min_average_precision": 0.035,
+    "min_recall_at_2pct_precision": 0.65
+  },
+  "regression_gate": {
+    "status": "PASS",
+    "regressed_metrics": [],
+    "comparisons": [
+      {
+        "metric": "average_precision",
+        "baseline": 0.036833,
+        "observed": 0.036833405987508866,
+        "relative_delta": 1.1022385058732045e-05,
+        "tolerance": 0.05,
+        "status": "PASS"
+      },
+      {
+        "metric": "precision",
+        "baseline": 0.020002,
+        "observed": 0.02000230574129583,
+        "relative_delta": 1.5285536237842792e-05,
+        "tolerance": 0.05,
+        "status": "PASS"
+      },
+      {
+        "metric": "recall",
+        "baseline": 0.670316,
+        "observed": 0.6703155183515775,
+        "relative_delta": -7.185393493203167e-07,
+        "tolerance": 0.05,
+        "status": "PASS"
+      },
+      {
+        "metric": "f1_score",
+        "baseline": 0.038845,
+        "observed": 0.03884545776815867,
+        "relative_delta": 1.1784480851356284e-05,
+        "tolerance": 0.1,
+        "status": "PASS"
+      },
+      {
+        "metric": "alerts",
+        "baseline": 52044.0,
+        "observed": 52044.0,
+        "relative_delta": 0.0,
+        "tolerance": 0.1,
+        "status": "PASS"
+      },
+      {
+        "metric": "alert_rate_pct",
+        "baseline": 3.416072,
+        "observed": 3.4160724225207155,
+        "relative_delta": 1.236861270207803e-07,
+        "tolerance": 0.1,
+        "status": "PASS"
+      },
+      {
+        "metric": "threshold",
+        "baseline": 0.892163,
+        "observed": 0.8921634554862976,
+        "relative_delta": 5.105415687134372e-07,
+        "tolerance": 0.05,
+        "status": "PASS"
+      }
+    ]
+  }
+}

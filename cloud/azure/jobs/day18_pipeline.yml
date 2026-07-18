@@ -1,0 +1,54 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: amlguard-day18-end-to-end
+experiment_name: amlguard-cloud-pipeline
+description: >-
+  End-to-end AMLGuard Azure ML pipeline using the three versioned Day 17
+  components. Model registration is performed only after this pipeline
+  completes successfully and the evaluation evidence confirms both gates PASS.
+
+inputs:
+  raw_data:
+    type: uri_file
+    path: azureml:ibm-aml-hi-small:1
+
+outputs:
+  model_output:
+    type: uri_folder
+    mode: upload
+  evaluation_output:
+    type: uri_folder
+    mode: upload
+
+settings:
+  default_compute: azureml:serverless
+  continue_on_step_failure: false
+
+jobs:
+  prepare_data:
+    type: command
+    component: azureml:amlguard_prepare_data:1
+    inputs:
+      raw_data: ${{parent.inputs.raw_data}}
+
+  train_model:
+    type: command
+    component: azureml:amlguard_train_model:1
+    inputs:
+      prepared_data: ${{parent.jobs.prepare_data.outputs.prepared_data}}
+    outputs:
+      model_output: ${{parent.outputs.model_output}}
+
+  evaluate_model:
+    type: command
+    component: azureml:amlguard_evaluate_model:1
+    inputs:
+      prepared_data: ${{parent.jobs.prepare_data.outputs.prepared_data}}
+      model_input: ${{parent.jobs.train_model.outputs.model_output}}
+    outputs:
+      evaluation_output: ${{parent.outputs.evaluation_output}}
+
+tags:
+  project: AMLGuard
+  phase: day18
+  purpose: end-to-end-pipeline

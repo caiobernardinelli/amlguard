@@ -1,0 +1,23 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: amlguard-day17-prepare-data
+experiment_name: amlguard-cloud-components
+inputs:
+  raw_data:
+    type: uri_file
+    path: azureml:ibm-aml-hi-small:1
+outputs:
+  prepared_data:
+    type: uri_folder
+    mode: upload
+    path: azureml://datastores/workspaceblobstore/paths/amlguard/day17/prepared
+settings:
+  default_compute: azureml:serverless
+jobs:
+  prepare_data:
+    type: command
+    component: azureml:amlguard_prepare_data:1
+    inputs:
+      raw_data: ${{parent.inputs.raw_data}}
+    outputs:
+      prepared_data: ${{parent.outputs.prepared_data}}

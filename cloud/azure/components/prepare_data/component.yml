@@ -1,0 +1,22 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+name: amlguard_prepare_data
+display_name: AMLGuard - Prepare Data
+version: "1"
+description: Validate the AML dataset and create the deterministic train/test split.
+code: ../../../..
+environment: azureml:amlguard-training:1
+inputs:
+  raw_data:
+    type: uri_file
+outputs:
+  prepared_data:
+    type: uri_folder
+command: >-
+  python -m cloud.azure.components.prepare_data.run
+  --raw-data ${{inputs.raw_data}}
+  --prepared-data ${{outputs.prepared_data}}
+tags:
+  project: AMLGuard
+  phase: day17
+  step: prepare_data

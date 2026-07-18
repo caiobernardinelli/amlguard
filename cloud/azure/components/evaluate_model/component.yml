@@ -1,0 +1,25 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+name: amlguard_evaluate_model
+display_name: AMLGuard - Evaluate Model
+version: "1"
+description: Evaluate the model and enforce AMLGuard quality and regression gates.
+code: ../../../..
+environment: azureml:amlguard-training:1
+inputs:
+  prepared_data:
+    type: uri_folder
+  model_input:
+    type: uri_folder
+outputs:
+  evaluation_output:
+    type: uri_folder
+command: >-
+  python -m cloud.azure.components.evaluate_model.run
+  --prepared-data ${{inputs.prepared_data}}
+  --model-input ${{inputs.model_input}}
+  --evaluation-output ${{outputs.evaluation_output}}
+tags:
+  project: AMLGuard
+  phase: day17
+  step: evaluate_model

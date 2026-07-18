@@ -1,0 +1,22 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+name: amlguard_train_model
+display_name: AMLGuard - Train Model
+version: "1"
+description: Train the frozen weighted XGBoost AMLGuard pipeline.
+code: ../../../..
+environment: azureml:amlguard-training:1
+inputs:
+  prepared_data:
+    type: uri_folder
+outputs:
+  model_output:
+    type: uri_folder
+command: >-
+  python -m cloud.azure.components.train_model.run
+  --prepared-data ${{inputs.prepared_data}}
+  --model-output ${{outputs.model_output}}
+tags:
+  project: AMLGuard
+  phase: day17
+  step: train_model

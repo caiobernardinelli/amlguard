@@ -1,0 +1,23 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: amlguard-day17-train-model
+experiment_name: amlguard-cloud-components
+inputs:
+  prepared_data:
+    type: uri_folder
+    path: azureml://datastores/workspaceblobstore/paths/amlguard/day17/prepared
+outputs:
+  model_output:
+    type: uri_folder
+    mode: upload
+    path: azureml://datastores/workspaceblobstore/paths/amlguard/day17/model
+settings:
+  default_compute: azureml:serverless
+jobs:
+  train_model:
+    type: command
+    component: azureml:amlguard_train_model:1
+    inputs:
+      prepared_data: ${{parent.inputs.prepared_data}}
+    outputs:
+      model_output: ${{parent.outputs.model_output}}

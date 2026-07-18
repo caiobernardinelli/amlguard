@@ -1,0 +1,27 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: amlguard-day17-evaluate-model
+experiment_name: amlguard-cloud-components
+inputs:
+  prepared_data:
+    type: uri_folder
+    path: azureml://datastores/workspaceblobstore/paths/amlguard/day17/prepared
+  model_input:
+    type: uri_folder
+    path: azureml://datastores/workspaceblobstore/paths/amlguard/day17/model
+outputs:
+  evaluation_output:
+    type: uri_folder
+    mode: upload
+    path: azureml://datastores/workspaceblobstore/paths/amlguard/day17/evaluation
+settings:
+  default_compute: azureml:serverless
+jobs:
+  evaluate_model:
+    type: command
+    component: azureml:amlguard_evaluate_model:1
+    inputs:
+      prepared_data: ${{parent.inputs.prepared_data}}
+      model_input: ${{parent.inputs.model_input}}
+    outputs:
+      evaluation_output: ${{parent.outputs.evaluation_output}}

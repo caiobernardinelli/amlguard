@@ -1,0 +1,41 @@
+{
+  "day": 21,
+  "scope": "recruiter_demo_local_validation",
+  "status": "PASS",
+  "captured_at_utc": "2026-07-20T23:41:11.750186+00:00",
+  "demo_entrypoint": "demo/app.py",
+  "model_artifact": {
+    "path": "artifacts/model.joblib",
+    "sha256": "b9c069b8fe40f7d905b59a1af6ba2d9c21b1c848daf5c78fbbd50ad94cfe1d2e",
+    "size_bytes": 255973
+  },
+  "validated_input": {
+    "Payment Format": "ACH",
+    "Amount Paid": 13701.3,
+    "sender_previous_tx_count": 238,
+    "is_business_hours": 0,
+    "same_account": 0
+  },
+  "validated_output": {
+    "risk_score": 0.985365629196167,
+    "is_alert": true,
+    "threshold": 0.892163,
+    "model_version": "0.1.0"
+  },
+  "acceptance_checks": {
+    "demo_app_exists": true,
+    "model_artifact_exists": true,
+    "model_sha256_matches_frozen_demo_artifact": true,
+    "form_mapping_matches_model_contract": true,
+    "risk_score_matches_validated_local_inference": true,
+    "alert_decision_is_true": true,
+    "threshold_matches_frozen_operating_point": true,
+    "model_version_matches_project_config": true
+  },
+  "notes": [
+    "The Streamlit interface uses the same persisted AMLGuard prediction contract.",
+    "The displayed score is rounded visually; the evidence stores the full model output.",
+    "The demo is a portfolio interface and must use synthetic or non-sensitive inputs.",
+    "Public hosting is not part of this Day 21 local validation."
+  ]
+}

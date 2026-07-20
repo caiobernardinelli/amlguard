@@ -225,3 +225,37 @@ The `Standard_DS2_v2` SKU produced an Azure CLI recommendation that
 `Standard_DS3_v2` is the minimum recommended general-purpose SKU. The project
 keeps `Standard_DS2_v2` for this portfolio/dev deployment to limit cost; this is
 not presented as a production capacity recommendation.
+
+## Endpoint lifecycle and cost closure
+
+The Azure ML Managed Online Endpoint was intentionally kept online through the
+Day 20 observability validation because live infrastructure was required to
+exercise:
+
+- real-time inference;
+- Azure Monitor endpoint telemetry;
+- Model Data Collector;
+- paired `model_inputs` / `model_outputs`;
+- synthetic monitoring traffic.
+
+After those acceptance checks and evidence files were completed, the endpoint
+`amlguard-realtime` was deleted. A follow-up `az ml online-endpoint show`
+returned `resource not found`, confirming that the managed online resource no
+longer existed.
+
+This lifecycle decision is deliberate:
+
+```text
+create -> validate -> capture evidence -> delete continuous-cost endpoint
+```
+
+The registered model, environment definitions, scoring code, deployment YAML,
+monitoring documentation and sanitized evidence remain part of the project.
+
+For the recruiter-facing portfolio experience, AMLGuard uses a separate
+lightweight Streamlit demo rather than keeping Azure ML inference compute
+provisioned continuously. See `docs/RECRUITER_DEMO.md`.
+
+The project does not claim that every Azure resource in the workspace is
+cost-free; storage, logging or other retained services may have separate
+charges. The continuous Managed Online Endpoint inference compute was removed.

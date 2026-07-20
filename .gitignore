@@ -241,6 +241,7 @@ mlruns/
 artifacts/*
 !artifacts/.gitkeep
 !artifacts/baseline_metrics.json
+!artifacts/model.joblib
 
 # Bootstrap scripts (temporary delivery mechanism; not part of the codebase)
 apply_day*.py

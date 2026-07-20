@@ -38,17 +38,17 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
 
-      - name: Install project with serve and dev extras
+      - name: Install project with serve, demo and dev extras
         run: |
           python -m pip install --upgrade pip
           # pyproject.toml is the source of truth for dependencies.
           # `-e` makes `src` importable; extras pull in fastapi/pydantic
           # (needed by test_api.py) and pytest/ruff/httpx (needed by the
           # suite itself).
-          pip install -e ".[serve,dev]"
+          pip install -e ".[serve,dev,demo]"
 
       - name: Ruff — style and static checks
-        run: ruff check src/ tests/
+        run: ruff check src/ tests/ demo/ scripts/demo/
 
       - name: Pytest — full acceptance suite
         run: pytest -v

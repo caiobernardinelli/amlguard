@@ -11,14 +11,24 @@ values only.
 
 from __future__ import annotations
 
+import logging
+import sys
+from importlib import import_module
 from pathlib import Path
 from typing import Any
 
 import streamlit as st
 
-from src.models.predict import predict_transaction
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
+
+# Community Cloud executes Streamlit from the repository root, but explicitly
+# adding the root keeps imports stable across local and hosted execution modes.
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+predict_transaction = import_module("src.models.predict").predict_transaction
+
+LOGGER = logging.getLogger(__name__)
 MODEL_PATH = REPO_ROOT / "artifacts" / "model.joblib"
 
 PAYMENT_FORMATS = (
@@ -182,8 +192,12 @@ def main() -> None:
 
         try:
             result = predict_transaction(features)
-        except Exception as exc:
-            st.exception(exc)
+        except Exception:
+            LOGGER.exception("AMLGuard recruiter demo scoring failed")
+            st.error(
+                "Unable to score this transaction right now. "
+                "Please try again later."
+            )
         else:
             render_result(result)
 

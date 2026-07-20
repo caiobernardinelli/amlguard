@@ -1,0 +1,31 @@
+{
+  "day": 20,
+  "scope": "retraining_strategy",
+  "status": "PASS",
+  "automatic_retraining": false,
+  "day20_synthetic_batch_retraining_decision": "DO_NOT_RETRAIN",
+  "drift_policy": {
+    "metric": "PSI",
+    "low": "< 0.10",
+    "moderate": "0.10 <= PSI < 0.25",
+    "significant": ">= 0.25",
+    "interpretation": "project monitoring heuristic"
+  },
+  "investigation_policy": {
+    "persistence_requirement": "three_consecutive_monitoring_windows",
+    "representative_traffic_required": true,
+    "synthetic_traffic_excluded_from_retraining_decisions": true
+  },
+  "quality_gates": {
+    "minimum_average_precision": 0.035,
+    "precision_operating_target": 0.02,
+    "minimum_recall_at_operating_point": 0.65,
+    "baseline_must_not_be_silently_changed": true
+  },
+  "promotion_policy": {
+    "candidate_must_pass_quality_gates": true,
+    "candidate_must_pass_serving_validation": true,
+    "candidate_must_pass_post_deployment_checks": true,
+    "automatic_production_promotion": false
+  }
+}

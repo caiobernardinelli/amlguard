@@ -1,0 +1,106 @@
+{
+  "day": 20,
+  "scope": "data_and_prediction_drift",
+  "status": "PASS",
+  "interpretation_scope": "synthetic_monitoring_demonstration",
+  "warning": "The current dataset is synthetic monitoring traffic generated for Day 20. Drift signals demonstrate the monitoring workflow and must not be interpreted as evidence of real production population drift.",
+  "reference": {
+    "source": "deterministic_frozen_pipeline_test_split",
+    "records": 1523504,
+    "model_artifact": "artifacts/model.joblib",
+    "threshold": 0.892163
+  },
+  "current": {
+    "source": "azure_ml_model_data_collector",
+    "records": 71,
+    "paired_input_output_records": 71,
+    "traffic_type": "synthetic_monitoring_traffic"
+  },
+  "psi_policy": {
+    "description": "AMLGuard project monitoring heuristic",
+    "low": "PSI < 0.1",
+    "moderate": "0.1 <= PSI < 0.25",
+    "significant": "PSI >= 0.25"
+  },
+  "data_drift": {
+    "Payment Format": {
+      "type": "categorical",
+      "psi": 0.6663035185345791,
+      "signal": "significant",
+      "category_count": 7
+    },
+    "Amount Paid": {
+      "type": "numeric",
+      "psi": 3.304549726518932,
+      "signal": "significant",
+      "bin_count": 10
+    },
+    "sender_previous_tx_count": {
+      "type": "numeric",
+      "psi": 3.4529958354987245,
+      "signal": "significant",
+      "bin_count": 10
+    },
+    "is_business_hours": {
+      "type": "binary",
+      "psi": 0.022414634585296172,
+      "signal": "low",
+      "category_count": 2
+    },
+    "same_account": {
+      "type": "binary",
+      "psi": 0.2987800910401534,
+      "signal": "significant",
+      "category_count": 2
+    }
+  },
+  "prediction_drift": {
+    "metric": "PSI",
+    "psi": 0.42460449515187587,
+    "signal": "significant",
+    "bin_count": 10,
+    "reference_score_summary": {
+      "mean": 0.10883670300245285,
+      "median": 0.0012486231280490756,
+      "p05": 0.00010085998655995354,
+      "p25": 0.0004397565789986402,
+      "p75": 0.007302269339561462,
+      "p95": 0.8186616897583008,
+      "min": 9.670175131759606e-06,
+      "max": 0.9909732937812805
+    },
+    "current_score_summary": {
+      "mean": 0.11359930921267607,
+      "median": 0.002928487,
+      "p05": 6.32548e-05,
+      "p25": 0.0005151596,
+      "p75": 0.027508614600000002,
+      "p95": 0.8727579116499999,
+      "min": 3.20957e-05,
+      "max": 0.9911246896
+    }
+  },
+  "alert_rate_shift": {
+    "threshold": 0.892163,
+    "reference_alert_rate": 0.034183697581365066,
+    "current_alert_rate": 0.04225352112676056,
+    "absolute_percentage_point_change": 0.8069823545395496
+  },
+  "summary": {
+    "overall_signal": "significant",
+    "significant_drift_features": [
+      "Amount Paid",
+      "Payment Format",
+      "same_account",
+      "sender_previous_tx_count"
+    ],
+    "moderate_drift_features": [],
+    "prediction_drift_signal": "significant"
+  },
+  "retraining_policy_preview": {
+    "automatic_retraining": false,
+    "recommended_action_for_this_batch": "Do not retrain from this synthetic batch. Use the result only to validate the monitoring pipeline.",
+    "production_principle": "A production retraining decision should require sustained drift on representative traffic plus model-quality evidence when ground-truth labels become available."
+  },
+  "privacy": "The report stores aggregate drift statistics only. Raw collected transaction records, correlation IDs, request IDs, Azure resource IDs, and credentials are excluded."
+}

@@ -1,12 +1,12 @@
 $schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
 name: amlguard-inference
-version: 1
-description: Reproducible inference environment for the AMLGuard managed online endpoint.
+version: 2
+description: Reproducible inference environment with Azure ML model data collection.
 
 image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04:latest
 conda_file: conda.yml
 
 tags:
   project: AMLGuard
-  phase: day19
-  purpose: real-time-inference
+  phase: day20
+  purpose: monitored-real-time-inference

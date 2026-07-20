@@ -7,7 +7,7 @@ code_configuration:
   code: .
   scoring_script: score.py
 
-environment: azureml:amlguard-inference:1
+environment: azureml:amlguard-inference:2
 
 environment_variables:
   AMLGUARD_THRESHOLD: "0.892163"
@@ -20,7 +20,16 @@ request_settings:
   request_timeout_ms: 5000
   max_concurrent_requests_per_instance: 1
 
+data_collector:
+  sampling_rate: 1.0
+  rolling_rate: Hour
+  collections:
+    model_inputs:
+      enabled: "true"
+    model_outputs:
+      enabled: "true"
+
 tags:
   project: AMLGuard
-  phase: day19
-  purpose: real-time-inference
+  phase: day20
+  purpose: monitored-real-time-inference

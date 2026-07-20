@@ -1,0 +1,106 @@
+{
+  "day": 20,
+  "scope": "operational_observability",
+  "status": "PASS",
+  "endpoint": "amlguard-realtime",
+  "deployment": "blue",
+  "observation_window_utc": {
+    "start": "2026-07-20T00:45:00Z",
+    "end": "2026-07-20T01:05:00Z"
+  },
+  "controlled_traffic": {
+    "client_side_successful_requests": 12,
+    "note": "The exact client-side request count comes from the controlled traffic generator. Azure Monitor RPM uses Average aggregation and is treated as traffic evidence, not exact reconciliation."
+  },
+  "azure_monitor": {
+    "traffic": {
+      "metric": "RequestsPerMinute",
+      "aggregation": "Average",
+      "successful_2xx_series_observed": true,
+      "series": [
+        {
+          "dimensions": {
+            "deployment": "blue",
+            "modelstatuscode": "200",
+            "statuscode": "200",
+            "statuscodeclass": "2xx"
+          },
+          "positive_points": [
+            {
+              "timestamp": "2026-07-20T00:48:00Z",
+              "average": 3.0
+            },
+            {
+              "timestamp": "2026-07-20T00:49:00Z",
+              "average": 3.0
+            }
+          ]
+        }
+      ],
+      "interpretation": "Positive Average RequestsPerMinute points prove successful traffic was observed by Azure Monitor. They are not used to reconcile the exact client-side request count."
+    },
+    "latency": {
+      "RequestLatency": {
+        "unit": "MilliSeconds",
+        "positive_points": [
+          {
+            "timestamp": "2026-07-20T00:47:00Z",
+            "average": 15.5
+          },
+          {
+            "timestamp": "2026-07-20T00:48:00Z",
+            "average": 16.333333333333332
+          }
+        ]
+      },
+      "RequestLatency_P50": {
+        "unit": "MilliSeconds",
+        "positive_points": [
+          {
+            "timestamp": "2026-07-20T00:47:00Z",
+            "average": 25.0
+          },
+          {
+            "timestamp": "2026-07-20T00:48:00Z",
+            "average": 18.0
+          }
+        ]
+      },
+      "RequestLatency_P95": {
+        "unit": "MilliSeconds",
+        "positive_points": [
+          {
+            "timestamp": "2026-07-20T00:47:00Z",
+            "average": 26.5
+          },
+          {
+            "timestamp": "2026-07-20T00:48:00Z",
+            "average": 18.0
+          }
+        ]
+      },
+      "RequestLatency_P99": {
+        "unit": "MilliSeconds",
+        "positive_points": [
+          {
+            "timestamp": "2026-07-20T00:47:00Z",
+            "average": 26.5
+          },
+          {
+            "timestamp": "2026-07-20T00:48:00Z",
+            "average": 18.0
+          }
+        ]
+      }
+    }
+  },
+  "acceptance_checks": {
+    "client_side_burst_has_successes": true,
+    "successful_2xx_traffic_observed": true,
+    "request_latency_observed": true,
+    "p50_latency_observed": true,
+    "p95_latency_observed": true,
+    "p99_latency_observed": true
+  },
+  "sensitive_data_policy": "Azure subscription IDs, resource IDs, authentication keys, and credentials are intentionally excluded."
+}

@@ -193,3 +193,35 @@ depends on live endpoint traffic.
 - [x] frozen serving threshold preserved
 - [x] sanitized deployment evidence captured
 - [x] no secrets persisted in repository
+
+## Day 20 monitoring upgrade
+
+Day 20 upgraded the existing `blue` deployment in place after the Day 19
+serving validation.
+
+The monitored deployment now uses:
+
+```text
+Model asset: AMLGuard:1
+Environment: amlguard-inference:2
+Data collection: model_inputs + model_outputs
+Sampling rate: 1.0
+```
+
+The external inference contract is unchanged.
+
+`amlguard-inference:1` remains the environment that was originally validated
+for the Day 19 deployment. Version `2` adds Azure ML model-data collection for
+the monitoring workflow documented in:
+
+```text
+docs/AZURE_MONITORING.md
+```
+
+The updated deployment returned to provisioning state `Succeeded` and a
+post-update smoke request reproduced the same validated response contract.
+
+The `Standard_DS2_v2` SKU produced an Azure CLI recommendation that
+`Standard_DS3_v2` is the minimum recommended general-purpose SKU. The project
+keeps `Standard_DS2_v2` for this portfolio/dev deployment to limit cost; this is
+not presented as a production capacity recommendation.

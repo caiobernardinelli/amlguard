@@ -1,0 +1,105 @@
+{
+  "day": 20,
+  "scope": "model_observability_traffic",
+  "status": "PASS",
+  "traffic_type": "synthetic_monitoring_traffic",
+  "endpoint": "amlguard-realtime",
+  "payment_formats": [
+    "Cheque",
+    "Credit Card",
+    "ACH",
+    "Cash",
+    "Reinvestment",
+    "Wire",
+    "Bitcoin"
+  ],
+  "requested_inferences": 70,
+  "successful_inferences": 70,
+  "failed_inferences": 0,
+  "failures": [],
+  "notes": [
+    "This batch is deterministic synthetic traffic created only to exercise model observability and Azure ML data collection.",
+    "It is not representative production traffic and must not be used to claim production model performance."
+  ],
+  "summary": {
+    "request_count": 70,
+    "alert_count": 2,
+    "alert_rate": 0.02857142857142857,
+    "score_distribution": {
+      "min": 3.2095682399813086e-05,
+      "p05": 6.271087786444696e-05,
+      "p25": 0.0005129199125804007,
+      "median": 0.002767241559922695,
+      "p75": 0.024945717304944992,
+      "p95": 0.8390580087900161,
+      "max": 0.9640668630599976,
+      "mean": 0.10106323234576849
+    },
+    "client_latency_ms": {
+      "min": 4613.967099983711,
+      "median": 5115.939600000274,
+      "p95": 6027.750479994574,
+      "max": 6898.575600003824,
+      "mean": 5194.344668573467,
+      "note": "Client-observed latency includes Azure CLI process overhead and network time; it is not the Azure Monitor server-side RequestLatency metric."
+    },
+    "by_payment_format": {
+      "ACH": {
+        "requests": 10,
+        "alerts": 2,
+        "alert_rate": 0.2,
+        "score_mean": 0.5349264737451449,
+        "score_min": 0.0033988936338573694,
+        "score_max": 0.9640668630599976
+      },
+      "Bitcoin": {
+        "requests": 10,
+        "alerts": 0,
+        "alert_rate": 0.0,
+        "score_mean": 0.06131767022670829,
+        "score_min": 0.00011843260290334001,
+        "score_max": 0.35643404722213745
+      },
+      "Cash": {
+        "requests": 10,
+        "alerts": 0,
+        "alert_rate": 0.0,
+        "score_mean": 0.007033095067527029,
+        "score_min": 5.781549771199934e-05,
+        "score_max": 0.04322267696261406
+      },
+      "Cheque": {
+        "requests": 10,
+        "alerts": 0,
+        "alert_rate": 0.0,
+        "score_mean": 0.05107562532793963,
+        "score_min": 0.00012255684123374522,
+        "score_max": 0.45741569995880127
+      },
+      "Credit Card": {
+        "requests": 10,
+        "alerts": 0,
+        "alert_rate": 0.0,
+        "score_mean": 0.025835036516218678,
+        "score_min": 3.2095682399813086e-05,
+        "score_max": 0.243776336312294
+      },
+      "Reinvestment": {
+        "requests": 10,
+        "alerts": 0,
+        "alert_rate": 0.0,
+        "score_mean": 0.020821642965165664,
+        "score_min": 4.1461928049102426e-05,
+        "score_max": 0.17210960388183594
+      },
+      "Wire": {
+        "requests": 10,
+        "alerts": 0,
+        "alert_rate": 0.0,
+        "score_mean": 0.006433082571675186,
+        "score_min": 5.3406667575472966e-05,
+        "score_max": 0.037756044417619705
+      }
+    }
+  }
+}

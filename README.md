@@ -9,7 +9,7 @@
 ![SHAP](https://img.shields.io/badge/Explainability-SHAP-purple)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-> **Skills demonstrated:** fraud detection · anomaly detection · imbalanced classification · precision–recall / PR-AUC (Average Precision) · feature engineering · data-leakage prevention · threshold tuning · cost-sensitive learning · XGBoost · Random Forest · Logistic Regression · SHAP explainability · model evaluation · **FastAPI + Pydantic serving** · **Docker (multi-stage, GHCR)** · **CI/CD (GitHub Actions)** · **MLflow tracking & model registry** · **Azure ML pipelines** · **Azure ML Managed Online Endpoints** · **real-time inference** · **cloud model deployment** · pytest (56 tests) · reproducibility engineering.
+> **Skills demonstrated:** fraud detection · anomaly detection · imbalanced classification · precision–recall / PR-AUC (Average Precision) · feature engineering · data-leakage prevention · threshold tuning · cost-sensitive learning · XGBoost · Random Forest · Logistic Regression · SHAP explainability · model evaluation · **FastAPI + Pydantic serving** · **Docker (multi-stage, GHCR)** · **CI/CD (GitHub Actions)** · **MLflow tracking & model registry** · **Azure ML pipelines** · **Azure ML Managed Online Endpoints** · **Azure Monitor** · **Model Data Collector** · **model monitoring** · **data drift / prediction drift (PSI)** · **retraining strategy** · **real-time inference** · **cloud model deployment** · pytest (56 tests) · reproducibility engineering.
 
 ---
 
@@ -98,7 +98,7 @@ Global feature contributions for the selected XGBoost model. Explanations improv
 
 ## Production architecture (Phase 2 — delivered)
 
-The academic notebook was refactored into a tested, containerised, cloud-deployed service over a 19-day MLOps delivery schedule. Every model-changing step is gated against the frozen baseline in [`artifacts/baseline_metrics.json`](./artifacts/baseline_metrics.json): a refactor is only accepted if it reproduces the validated metrics, and model promotion occurs only after explicit quality and regression gates pass.
+The academic notebook was refactored into a tested, containerised, cloud-deployed and monitored service over a 20-day MLOps delivery schedule. Every model-changing step is gated against the frozen baseline in [`artifacts/baseline_metrics.json`](./artifacts/baseline_metrics.json): a refactor is only accepted if it reproduces the validated metrics, and model promotion occurs only after explicit quality and regression gates pass.
 
 | Layer | What exists | Proof |
 |---|---|---|
@@ -109,10 +109,13 @@ The academic notebook was refactored into a tested, containerised, cloud-deploye
 | **Model registry** | MLflow tracking (SQLite backend) + PyFunc-packaged model with `candidate` / `champion` aliases and a documented promotion flow | [`docs/MODEL_PROMOTION.md`](./docs/MODEL_PROMOTION.md) |
 | **Cloud pipeline** | Azure ML workspace, versioned data asset, reusable command components (prepare / train / evaluate), end-to-end pipeline, gated promotion and registered `AMLGuard:1` model asset | [`docs/AZURE_PIPELINE.md`](./docs/AZURE_PIPELINE.md) |
 | **Real-time cloud inference** | Azure ML Managed Online Endpoint with key authentication, dedicated inference environment, `blue` deployment and 100% traffic routing | [`docs/AZURE_ONLINE_ENDPOINT.md`](./docs/AZURE_ONLINE_ENDPOINT.md) |
+| **Monitoring & drift** | Azure Monitor latency/traffic telemetry, Azure ML Model Data Collector, paired input/output telemetry, alert-rate and score monitoring, PSI-based data/prediction drift workflow and retraining policy | [`docs/AZURE_MONITORING.md`](./docs/AZURE_MONITORING.md) |
 
 **Reproducibility, proven in the cloud:** the Azure ML end-to-end pipeline retrained and re-evaluated the model on Azure compute and reproduced the frozen baseline — Average Precision `0.036833` in the cloud vs `0.036833` frozen locally. Only after both quality and regression gates passed was `AMLGuard:1` registered ([pipeline evidence](./docs/evidence/day18_evaluation_metrics.json)).
 
 **Serving, proven with a live cloud request:** `AMLGuard:1` is deployed behind an Azure ML Managed Online Endpoint. The validated request returned `score`, `alert`, the frozen `threshold = 0.892163`, and `model_version = 1`, with 100% of traffic routed to the `blue` deployment ([serving evidence](./docs/evidence/day19_online_endpoint.json)).
+
+**Monitoring, proven on the live endpoint:** Azure Monitor recorded successful 2xx traffic and server-side latency telemetry; Azure ML Model Data Collector persisted and paired 71 `model_inputs` / `model_outputs` records. A synthetic monitoring batch exercised alert-rate, score-distribution, data-drift and prediction-drift analysis. Significant PSI signals are documented as a monitoring-workflow demonstration only—not as evidence of real production drift ([monitoring docs](./docs/AZURE_MONITORING.md)).
 
 ### Run the service without installing anything (Docker)
 
@@ -153,9 +156,10 @@ amlguard/
 │   └── api/main.py                  # FastAPI: /health /model-info /predict /predict-batch
 ├── tests/                           # 56 tests, CSV-free (synthetic fixtures)
 ├── cloud/azure/                     # Azure ML: data, components, pipelines, online serving
-│   └── online/                      # endpoint, deployment, inference env, score.py, sample request
+│   └── online/                      # endpoint, monitored deployment, inference env, score.py
+├── scripts/monitoring/              # synthetic traffic, collection validation, drift reporting
 ├── artifacts/baseline_metrics.json  # FROZEN baseline — the regression guard
-├── docs/                            # baseline, Azure, model-promotion docs + run evidence
+├── docs/                            # baseline, Azure, monitoring, retraining docs + run evidence
 ├── Dockerfile                       # multi-stage build (671 MB runtime image)
 ├── docker-compose.yml               # one-command local boot with model bind-mount
 ├── .github/workflows/ci.yml         # ruff + pytest + hadolint + GHCR publish
@@ -205,7 +209,7 @@ The raw CSV is intentionally **not** committed; the loader fetches it at runtime
 
 ## Roadmap (modelling improvements)
 
-The MLOps serving stack (FastAPI · Docker/GHCR · CI/CD · MLflow · Azure ML pipelines · model registry · Managed Online Endpoint) is **delivered** — see [Production architecture](#production-architecture-phase-2--delivered). What remains on the roadmap is model-science and observability work:
+The core MLOps stack (FastAPI · Docker/GHCR · CI/CD · MLflow · Azure ML pipelines · model registry · Managed Online Endpoint · Azure Monitor · Model Data Collector · drift workflow) is **delivered** — see [Production architecture](#production-architecture-phase-2--delivered). What remains on the roadmap is deeper model-science and analyst-facing product work:
 
 | Priority | Improvement | Value |
 |---|---|---|
@@ -216,7 +220,7 @@ The MLOps serving stack (FastAPI · Docker/GHCR · CI/CD · MLflow · Azure ML p
 | 5 | Sensitivity analysis without `same_account` | Quantify dependence on a possibly confounded signal |
 | 6 | SMOTENC / cost-sensitive comparison | Category-aware resampling |
 | 7 | Probability calibration | Stable, interpretable risk scores |
-| 8 | Streamlit triage UI + monitoring dashboards | Analyst-facing layer on top of the API |
+| 8 | Streamlit triage UI + production monitoring dashboards | Analyst-facing layer and richer long-running operational views |
 
 ---
 

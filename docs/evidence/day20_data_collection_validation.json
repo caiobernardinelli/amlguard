@@ -1,0 +1,41 @@
+{
+  "day": 20,
+  "scope": "azure_ml_model_data_collection_validation",
+  "status": "PASS",
+  "inputs": {
+    "label": "model_inputs",
+    "records": 71,
+    "valid_correlation_ids": 71,
+    "missing_correlation_ids": 0,
+    "duplicate_correlation_id_count": 0,
+    "invalid_data_shapes": 0,
+    "schema_mismatches": 0
+  },
+  "outputs": {
+    "label": "model_outputs",
+    "records": 71,
+    "valid_correlation_ids": 71,
+    "missing_correlation_ids": 0,
+    "duplicate_correlation_id_count": 0,
+    "invalid_data_shapes": 0,
+    "schema_mismatches": 0
+  },
+  "pairing": {
+    "matched_pairs": 71,
+    "input_only_count": 0,
+    "output_only_count": 0
+  },
+  "acceptance_checks": {
+    "input_records_present": true,
+    "output_records_present": true,
+    "input_output_record_counts_match": true,
+    "input_correlation_ids_unique": true,
+    "output_correlation_ids_unique": true,
+    "all_inputs_have_correlation_id": true,
+    "all_outputs_have_correlation_id": true,
+    "input_schema_valid": true,
+    "output_schema_valid": true,
+    "all_input_output_pairs_matched": true
+  },
+  "privacy": "Evidence contains structural counts only. Collected transaction feature values, prediction scores, request IDs, correlation IDs, Azure resource IDs, and credentials are intentionally excluded."
+}

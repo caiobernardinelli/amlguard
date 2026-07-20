@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "captured_at_utc": "2026-07-20T00:16:30.162411+00:00",
+  "endpoint": {
+    "name": "amlguard-realtime",
+    "provisioning_state": "Succeeded",
+    "auth_mode": "key",
+    "traffic": {
+      "blue": 100
+    }
+  },
+  "deployment": {
+    "name": "blue",
+    "provisioning_state": "Succeeded",
+    "instance_type": "Standard_DS2_v2"
+  },
+  "registered_assets": {
+    "model": "AMLGuard:1",
+    "environment": "amlguard-inference:1"
+  },
+  "inference": {
+    "score": 0.99112468957901,
+    "alert": true,
+    "threshold": 0.892163,
+    "model_version": "1"
+  },
+  "acceptance_checks": {
+    "endpoint_succeeded": true,
+    "deployment_succeeded": true,
+    "all_traffic_to_blue": true,
+    "real_time_inference_succeeded": true,
+    "response_contract_valid": true,
+    "frozen_threshold_preserved": true,
+    "registered_model_version_returned": true
+  }
+}

@@ -9,7 +9,7 @@
 ![SHAP](https://img.shields.io/badge/Explainability-SHAP-purple)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-> **Skills demonstrated:** fraud detection · anomaly detection · imbalanced classification · precision–recall / PR-AUC (Average Precision) · feature engineering · data-leakage prevention · threshold tuning · cost-sensitive learning · XGBoost · Random Forest · Logistic Regression · SHAP explainability · model evaluation · **FastAPI + Pydantic serving** · **Docker (multi-stage, GHCR)** · **CI/CD (GitHub Actions)** · **MLflow tracking & model registry** · **Azure ML pipelines** · pytest (56 tests) · reproducibility engineering.
+> **Skills demonstrated:** fraud detection · anomaly detection · imbalanced classification · precision–recall / PR-AUC (Average Precision) · feature engineering · data-leakage prevention · threshold tuning · cost-sensitive learning · XGBoost · Random Forest · Logistic Regression · SHAP explainability · model evaluation · **FastAPI + Pydantic serving** · **Docker (multi-stage, GHCR)** · **CI/CD (GitHub Actions)** · **MLflow tracking & model registry** · **Azure ML pipelines** · **Azure ML Managed Online Endpoints** · **real-time inference** · **cloud model deployment** · pytest (56 tests) · reproducibility engineering.
 
 ---
 
@@ -98,7 +98,7 @@ Global feature contributions for the selected XGBoost model. Explanations improv
 
 ## Production architecture (Phase 2 — delivered)
 
-The academic notebook was refactored into a tested, containerised, cloud-validated service over a 17-day MLOps schedule. Every step is gated against the frozen baseline in [`artifacts/baseline_metrics.json`](./artifacts/baseline_metrics.json): a refactor is only accepted if it reproduces the validated metrics.
+The academic notebook was refactored into a tested, containerised, cloud-deployed service over a 19-day MLOps delivery schedule. Every model-changing step is gated against the frozen baseline in [`artifacts/baseline_metrics.json`](./artifacts/baseline_metrics.json): a refactor is only accepted if it reproduces the validated metrics, and model promotion occurs only after explicit quality and regression gates pass.
 
 | Layer | What exists | Proof |
 |---|---|---|
@@ -107,9 +107,12 @@ The academic notebook was refactored into a tested, containerised, cloud-validat
 | **Container** | Multi-stage Dockerfile (671 MB), non-root user, HEALTHCHECK; `docker compose up` for one-command boot | `hadolint` clean |
 | **CI/CD** | GitHub Actions: ruff + pytest + hadolint on every push; Docker image built and pushed to GHCR on `main` | CI badge above; [Actions history](https://github.com/caiobernardinelli/amlguard/actions) |
 | **Model registry** | MLflow tracking (SQLite backend) + PyFunc-packaged model with `candidate` / `champion` aliases and a documented promotion flow | [`docs/MODEL_PROMOTION.md`](./docs/MODEL_PROMOTION.md) |
-| **Cloud** | Azure ML workspace, versioned data asset, reusable command components (prepare / train / evaluate) and pipeline jobs | [`docs/AZURE_COMPONENTS.md`](./docs/AZURE_COMPONENTS.md) |
+| **Cloud pipeline** | Azure ML workspace, versioned data asset, reusable command components (prepare / train / evaluate), end-to-end pipeline, gated promotion and registered `AMLGuard:1` model asset | [`docs/AZURE_PIPELINE.md`](./docs/AZURE_PIPELINE.md) |
+| **Real-time cloud inference** | Azure ML Managed Online Endpoint with key authentication, dedicated inference environment, `blue` deployment and 100% traffic routing | [`docs/AZURE_ONLINE_ENDPOINT.md`](./docs/AZURE_ONLINE_ENDPOINT.md) |
 
-**Reproducibility, proven in the cloud:** the Azure ML pipeline retrained and re-evaluated the model on Azure compute and reproduced the frozen baseline exactly — Average Precision `0.036833` in the cloud vs `0.036833` frozen locally ([evidence](./docs/evidence/day17_evaluation_metrics.json)). Same seed, same config, different OS and hardware, identical result.
+**Reproducibility, proven in the cloud:** the Azure ML end-to-end pipeline retrained and re-evaluated the model on Azure compute and reproduced the frozen baseline — Average Precision `0.036833` in the cloud vs `0.036833` frozen locally. Only after both quality and regression gates passed was `AMLGuard:1` registered ([pipeline evidence](./docs/evidence/day18_evaluation_metrics.json)).
+
+**Serving, proven with a live cloud request:** `AMLGuard:1` is deployed behind an Azure ML Managed Online Endpoint. The validated request returned `score`, `alert`, the frozen `threshold = 0.892163`, and `model_version = 1`, with 100% of traffic routed to the `blue` deployment ([serving evidence](./docs/evidence/day19_online_endpoint.json)).
 
 ### Run the service without installing anything (Docker)
 
@@ -149,7 +152,8 @@ amlguard/
 │   │   └── mlflow_model.py          # PyFunc packaging + candidate/champion aliases
 │   └── api/main.py                  # FastAPI: /health /model-info /predict /predict-batch
 ├── tests/                           # 56 tests, CSV-free (synthetic fixtures)
-├── cloud/azure/                     # Azure ML: components, environment, data asset, jobs
+├── cloud/azure/                     # Azure ML: data, components, pipelines, online serving
+│   └── online/                      # endpoint, deployment, inference env, score.py, sample request
 ├── artifacts/baseline_metrics.json  # FROZEN baseline — the regression guard
 ├── docs/                            # baseline, Azure, model-promotion docs + run evidence
 ├── Dockerfile                       # multi-stage build (671 MB runtime image)
@@ -201,7 +205,7 @@ The raw CSV is intentionally **not** committed; the loader fetches it at runtime
 
 ## Roadmap (modelling improvements)
 
-The MLOps serving stack (FastAPI · Docker/GHCR · CI/CD · MLflow · Azure ML) is **delivered** — see [Production architecture](#production-architecture-phase-2--delivered). What remains on the roadmap is model-science work:
+The MLOps serving stack (FastAPI · Docker/GHCR · CI/CD · MLflow · Azure ML pipelines · model registry · Managed Online Endpoint) is **delivered** — see [Production architecture](#production-architecture-phase-2--delivered). What remains on the roadmap is model-science and observability work:
 
 | Priority | Improvement | Value |
 |---|---|---|

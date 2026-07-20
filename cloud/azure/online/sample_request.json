@@ -1,0 +1,9 @@
+{
+  "data": {
+    "Payment Format": "ACH",
+    "Amount Paid": 13701.30,
+    "sender_previous_tx_count": 238,
+    "is_business_hours": 0,
+    "same_account": 0
+  }
+}

@@ -1,0 +1,26 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
+name: blue
+endpoint_name: amlguard-realtime
+model: azureml:AMLGuard:1
+
+code_configuration:
+  code: .
+  scoring_script: score.py
+
+environment: azureml:amlguard-inference:1
+
+environment_variables:
+  AMLGUARD_THRESHOLD: "0.892163"
+  AMLGUARD_MODEL_VERSION: "1"
+
+instance_type: Standard_DS2_v2
+instance_count: 1
+
+request_settings:
+  request_timeout_ms: 5000
+  max_concurrent_requests_per_instance: 1
+
+tags:
+  project: AMLGuard
+  phase: day19
+  purpose: real-time-inference

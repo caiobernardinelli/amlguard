@@ -1,0 +1,113 @@
+{
+  "release": "v1.0.1",
+  "scope": "maintenance_hotfix",
+  "status": "PASS",
+  "captured_at_utc": "2026-07-21T21:49:51.330220+00:00",
+  "version_domains": {
+    "project_release": "v1.0.1",
+    "python_package": "1.0.1",
+    "fastapi_service": "1.0.1",
+    "frozen_model_contract": "0.1.0",
+    "azure_ml_model_asset": "AMLGuard:1"
+  },
+  "repository": {
+    "branch": "main",
+    "audited_commit": "55cb732e717f0db482d87520375bbb83171f73e8",
+    "v1_0_0_commit": "55cb732e717f0db482d87520375bbb83171f73e8",
+    "unexpected_worktree_entries": []
+  },
+  "model_artifact": {
+    "path": "artifacts/model.joblib",
+    "sha256": "b9c069b8fe40f7d905b59a1af6ba2d9c21b1c848daf5c78fbbd50ad94cfe1d2e",
+    "expected_sha256": "b9c069b8fe40f7d905b59a1af6ba2d9c21b1c848daf5c78fbbd50ad94cfe1d2e"
+  },
+  "metric_contract": {
+    "frozen_average_precision": 0.036833,
+    "headline_four_decimal_display": "0.0368"
+  },
+  "documentation_checks": {
+    "headline_ap_is_0_0368": true,
+    "headline_ap_0_0369_absent": true,
+    "readme_release_is_v1_0_1": true,
+    "readme_test_count_is_60": true,
+    "readme_manual_disclosure": true,
+    "manual_index_disclosure": true,
+    "release_notes_version": true,
+    "release_notes_model_unchanged": true,
+    "changelog_hotfix_first": true
+  },
+  "quality_commands": {
+    "ruff": {
+      "command": [
+        "C:\\Users\\cfber\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\python.exe",
+        "-m",
+        "ruff",
+        "check",
+        "src",
+        "tests",
+        "demo",
+        "scripts"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "output": "All checks passed!"
+    },
+    "pytest": {
+      "command": [
+        "C:\\Users\\cfber\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\python.exe",
+        "-m",
+        "pytest",
+        "-o",
+        "addopts=",
+        "-q"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "output": "............................................................             [100%]\n============================== warnings summary ===============================\n..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python312\\site-packages\\fastapi\\testclient.py:1\n  C:\\Users\\cfber\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python312\\site-packages\\fastapi\\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.\n    from starlette.testclient import TestClient as TestClient  # noqa\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n60 passed, 1 warning in 8.02s",
+      "test_count": 60,
+      "expected_test_count": 60
+    },
+    "git_diff_check": {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "output": "warning: in the working copy of 'CHANGELOG.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/manuals/README.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'pyproject.toml', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'src/api/main.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'tests/test_api.py', LF will be replaced by CRLF the next time Git touches it"
+    }
+  },
+  "repository_checks": {
+    "missing_required_files": [],
+    "broken_local_markdown_links": [],
+    "tracked_hygiene_failures": []
+  },
+  "checks": {
+    "branch_is_main": true,
+    "required_files_present": true,
+    "package_version_is_1_0_1": true,
+    "service_version_is_1_0_1": true,
+    "model_version_remains_0_1_0": true,
+    "version_domains_are_separate": true,
+    "model_sha256_unchanged": true,
+    "baseline_average_precision_unchanged": true,
+    "baseline_rounds_to_0_0368": true,
+    "day24_evidence_remains_pass": true,
+    "documentation_contract_pass": true,
+    "release_tag_available": true,
+    "ruff_pass": true,
+    "pytest_60_pass": true,
+    "git_diff_check_pass": true,
+    "local_markdown_links_pass": true,
+    "tracked_hygiene_pass": true,
+    "no_unexpected_worktree_entries": true
+  },
+  "limitations": [
+    "The IBM AML dataset is synthetic.",
+    "The model score is not a calibrated probability.",
+    "Predictions require human review.",
+    "The public Streamlit demo is not covered by a production SLA.",
+    "Hotfix evidence is generated before the final commit and annotated v1.0.1 tag are created."
+  ]
+}

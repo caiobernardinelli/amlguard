@@ -9,7 +9,7 @@ from __future__ import annotations
 import pytest
 from fastapi.testclient import TestClient
 
-from src.api.main import app
+from src.api.main import SERVICE_VERSION, app
 from src.config import FINAL_MODEL_NAME, FINAL_THRESHOLD, MODEL_FEATURES, MODEL_VERSION
 
 
@@ -63,7 +63,7 @@ class TestHealth:
         }
         assert body["status"] == "ok"
         assert body["service"] == "amlguard-api"
-        assert isinstance(body["service_version"], str)
+        assert body["service_version"] == SERVICE_VERSION == "1.0.1"
         assert isinstance(body["timestamp_utc"], str)
 
     def test_reports_model_loaded_when_cache_populated(self, client_with_model):

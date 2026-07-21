@@ -8,11 +8,11 @@
 ![XGBoost](https://img.shields.io/badge/XGBoost-2.0%2B-brightgreen)
 ![SHAP](https://img.shields.io/badge/Explainability-SHAP-purple)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
-![Release](https://img.shields.io/badge/release-v1.0.0-blueviolet)
+![Release](https://img.shields.io/badge/release-v1.0.1-blueviolet)
 
 > **Live recruiter demo:** [Open AMLGuard on Streamlit](https://amlguard-demo.streamlit.app) — public inference with the frozen model artifact, validated on Python 3.12.
 
-> **Skills demonstrated:** fraud detection · anomaly detection · imbalanced classification · precision–recall / PR-AUC (Average Precision) · feature engineering · data-leakage prevention · threshold tuning · cost-sensitive learning · XGBoost · Random Forest · Logistic Regression · SHAP explainability · model evaluation · **FastAPI + Pydantic serving** · **Docker (multi-stage, GHCR)** · **CI/CD (GitHub Actions)** · **MLflow tracking & model registry** · **Azure ML pipelines** · **Azure ML Managed Online Endpoints** · **Azure Monitor** · **Model Data Collector** · **model monitoring** · **data drift / prediction drift (PSI)** · **retraining strategy** · **real-time inference** · **cloud model deployment** · **public Streamlit recruiter demo** · pytest (56 tests) · reproducibility engineering · **portfolio-readiness audit** · **release engineering**.
+> **Skills demonstrated:** fraud detection · anomaly detection · imbalanced classification · precision–recall / PR-AUC (Average Precision) · feature engineering · data-leakage prevention · threshold tuning · cost-sensitive learning · XGBoost · Random Forest · Logistic Regression · SHAP explainability · model evaluation · **FastAPI + Pydantic serving** · **Docker (multi-stage, GHCR)** · **CI/CD (GitHub Actions)** · **MLflow tracking & model registry** · **Azure ML pipelines** · **Azure ML Managed Online Endpoints** · **Azure Monitor** · **Model Data Collector** · **model monitoring** · **data drift / prediction drift (PSI)** · **retraining strategy** · **real-time inference** · **cloud model deployment** · **public Streamlit recruiter demo** · pytest (60 tests) · reproducibility engineering · **portfolio-readiness audit** · **release engineering**.
 
 ---
 
@@ -24,7 +24,7 @@ On **5,078,345** real-schema transactions where only **0.1019%** are laundering,
 
 | Metric | Value | What it means for a compliance team |
 |---|---:|---|
-| **Average Precision** | **0.0369** | Best ranking of all evaluated models (~36× the 0.001 base rate) |
+| **Average Precision** | **0.0368** | Best ranking of all evaluated models (~36× the 0.001 base rate) |
 | **Recall** | **67.0%** | Detects two-thirds of the labelled laundering transactions |
 | **Precision** | **2.0%** | ~1 true case per 50 reviewed alerts |
 | **Alert rate** | **3.42%** | Only 3.42% of transactions sent for human review |
@@ -105,7 +105,7 @@ The academic notebook was refactored into a tested, containerised, cloud-deploye
 
 | Layer | What exists | Proof |
 |---|---|---|
-| **Package + tests** | `src/` package (data, features, models, api) with **56 pytest tests**, synthetic fixtures (no CSV needed in CI) | `pytest` → 56 passed; `ruff` clean |
+| **Package + tests** | `src/` package (data, features, models, api) with **60 pytest tests**, synthetic fixtures (no CSV needed in CI) | `pytest` → 60 passed; `ruff` clean |
 | **Serving** | FastAPI app: `/health`, `/model-info`, `/predict`, `/predict-batch` with Pydantic validation and in-process model cache | Interactive docs at `/docs` |
 | **Container** | Multi-stage Dockerfile (671 MB), non-root user, HEALTHCHECK; `docker compose up` for one-command boot | `hadolint` clean |
 | **CI/CD** | GitHub Actions: ruff + pytest + hadolint on every push; Docker image built and pushed to GHCR on `main` | CI badge above; [Actions history](https://github.com/caiobernardinelli/amlguard/actions) |
@@ -115,7 +115,7 @@ The academic notebook was refactored into a tested, containerised, cloud-deploye
 | **Monitoring & drift** | Azure Monitor latency/traffic telemetry, Azure ML Model Data Collector, paired input/output telemetry, alert-rate and score monitoring, PSI-based data/prediction drift workflow and retraining policy | [`docs/AZURE_MONITORING.md`](./docs/AZURE_MONITORING.md) |
 | **Recruiter demo** | Public Streamlit Community Cloud application backed by the frozen `artifacts/model.joblib`; Python 3.12 runtime and score/alert/threshold/model-version parity validated through a live browser submission | [Live app](https://amlguard-demo.streamlit.app) · [documentation](./docs/RECRUITER_DEMO.md) · [evidence](./docs/evidence/day22_public_deployment.json) |
 | **Portfolio readiness** | Manual-guided and repository-backed audit of Days 1-22, including exact Git history, evidence files, local-link checks and tracked-file hygiene | [documentation](./docs/PORTFOLIO_READINESS.md) · [evidence](./docs/evidence/day23_portfolio_readiness.json) |
-| **Final release** | Versioned `v1.0.0` portfolio release with final quality gate, changelog, release notes and study manual; the frozen model contract remains `0.1.0` | [documentation](./docs/FINAL_RELEASE.md) · [release notes](./docs/RELEASE_NOTES_v1.0.0.md) |
+| **Current release** | `v1.0.1` maintenance release correcting the headline metric rounding, aligning the FastAPI service version and adding permanent release-integrity tests; the frozen model contract remains `0.1.0` | [v1.0.1 release notes](./docs/RELEASE_NOTES_v1.0.1.md) · [v1.0.0 delivery record](./docs/FINAL_RELEASE.md) |
 
 **Reproducibility, proven in the cloud:** the Azure ML end-to-end pipeline retrained and re-evaluated the model on Azure compute and reproduced the frozen baseline — Average Precision `0.036833` in the cloud vs `0.036833` frozen locally. Only after both quality and regression gates passed was `AMLGuard:1` registered ([pipeline evidence](./docs/evidence/day18_evaluation_metrics.json)).
 
@@ -127,7 +127,9 @@ The academic notebook was refactored into a tested, containerised, cloud-deploye
 
 **Portfolio readiness, audited:** Day 23 cross-checks the intended deliveries from Days 1-22 against the study manuals, current repository artifacts, exact Git history and structured evidence. The permanent validator also checks local Markdown links, tracked-file hygiene and public-demo references ([audit documentation](./docs/PORTFOLIO_READINESS.md); [Day 23 evidence](./docs/evidence/day23_portfolio_readiness.json)).
 
-**Final release candidate:** Day 24 packages the complete project as `v1.0.0`, while preserving the frozen model contract as `0.1.0`. The release gate reruns Ruff and all 56 tests, verifies the model artifact hash, checks prior evidence and requires the final Volume 7 study manual ([release documentation](./docs/FINAL_RELEASE.md); [release notes](./docs/RELEASE_NOTES_v1.0.0.md)).
+**Current maintenance release:** `v1.0.1` preserves the frozen model contract as `0.1.0`, corrects the README Average Precision display to `0.0368`, aligns `/health` and OpenAPI with service version `1.0.1`, and adds permanent tests for version-domain separation and model-artifact integrity ([v1.0.1 release notes](./docs/RELEASE_NOTES_v1.0.1.md)).
+
+> **Study manuals:** the PDFs in [`docs/manuals/`](./docs/manuals/) are Portuguese-language learning records documenting the development process. Production code, technical documentation, release notes and recruiter-facing materials remain in English.
 
 ### Run the service without installing anything (Docker)
 
@@ -166,7 +168,7 @@ amlguard/
 │   │   ├── tracking.py              # MLflow experiment tracking
 │   │   └── mlflow_model.py          # PyFunc packaging + candidate/champion aliases
 │   └── api/main.py                  # FastAPI: /health /model-info /predict /predict-batch
-├── tests/                           # 56 tests, CSV-free (synthetic fixtures)
+├── tests/                           # 60 tests, CSV-free (synthetic fixtures)
 ├── cloud/azure/                     # Azure ML: data, components, pipelines, online serving
 │   └── online/                      # endpoint, monitored deployment, inference env, score.py
 ├── demo/
@@ -199,7 +201,7 @@ python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\act
 pip install -e ".[serve,dev,demo]"
 
 # 3. Verify the refactored pipeline (no dataset needed — fixtures are synthetic)
-pytest            # expected: 56 passed
+pytest            # expected: 60 passed
 python -m ruff check src tests demo scripts
 
 # 4. Full training on the real dataset (downloads the 476 MB CSV on first run)

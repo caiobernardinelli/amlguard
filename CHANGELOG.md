@@ -5,6 +5,30 @@ All notable changes to AMLGuard are documented in this file.
 The format follows Keep a Changelog principles, and this project uses Semantic
 Versioning for portfolio releases.
 
+## [1.0.1] - 2026-07-22
+
+### Fixed
+
+- Corrected the README headline Average Precision from `0.0369` to `0.0368`,
+  matching the frozen `0.036833` baseline rounded to four decimal places.
+- Aligned the FastAPI service and OpenAPI version with the maintenance release:
+  `service_version = 1.0.1`.
+
+### Added
+
+- Exact release-contract tests separating project/service version `1.0.1`
+  from the frozen model contract `0.1.0`.
+- A permanent SHA-256 integrity test for `artifacts/model.joblib`.
+- English disclosure explaining that the study-manual PDFs are
+  Portuguese-language learning records.
+
+### Unchanged
+
+- Frozen model contract: `0.1.0`.
+- Frozen model SHA-256: `b9c069b8fe40f7d905b59a1af6ba2d9c21b1c848daf5c78fbbd50ad94cfe1d2e`.
+- Decision threshold and validated model metrics.
+- Azure ML registered model asset: `AMLGuard:1`.
+
 ## [1.0.0] - 2026-07-21
 
 ### Added

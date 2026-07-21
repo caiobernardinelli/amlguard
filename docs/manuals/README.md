@@ -2,6 +2,8 @@
 
 Canonical sequential collection used by the repository.
 
+The PDFs are Portuguese-language learning records created during the project. Production code, technical documentation, release notes and recruiter-facing materials remain in English.
+
 | Volume | Scope | Delivery days | File |
 | ---: | --- | --- | --- |
 | 1 | Notebook, modelling and MLOps refactor | Days 1-6 | `AMLGuard_Manual_Estudo_Vol1_Notebook_ao_Pipeline_MLOps.pdf` |

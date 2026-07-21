@@ -58,7 +58,7 @@ from src.models.predict import get_model
 logger = logging.getLogger(__name__)
 
 SERVICE_NAME = "amlguard-api"
-SERVICE_VERSION = "0.1.0"
+SERVICE_VERSION = "1.0.1"
 
 
 # --------------------------------------------------------------------------- #

@@ -1,0 +1,1152 @@
+{
+  "day": 23,
+  "scope": "manual_guided_portfolio_readiness_audit",
+  "status": "PASS",
+  "captured_at_utc": "2026-07-21T20:19:42.708472+00:00",
+  "repository": {
+    "branch": "main",
+    "git_commit": "81c09a90ee4ea847dbc251f9d10ae402d297e704",
+    "working_tree_entries_at_start": [
+      "M README.md",
+      "?? docs/PORTFOLIO_READINESS.md",
+      "?? docs/evidence/day23_portfolio_readiness.json",
+      "?? scripts/audit/"
+    ]
+  },
+  "audit_method": {
+    "days_1_to_6": "Manual principal, Parte 3, checked against repository artifacts",
+    "day_7": "Git history, including the formal pytest and Ruff commit 8f20dacb59c43601d826365d66e68726ef147c3c",
+    "days_8_to_10": "Manual Volume 3, checked against API and Docker artifacts",
+    "days_11_to_12": "Manual Volume 4, checked against CI/CD artifacts",
+    "days_13_to_14": "Manual Volume 5, checked against MLflow artifacts",
+    "days_15_to_17": "Manual Volume 6, checked against Azure ML artifacts",
+    "days_18_to_22": "Versioned documentation, evidence JSONs and exact Day commits",
+    "day_20_interpretation": "Manual Volume 7, preserving the synthetic-traffic limitation"
+  },
+  "days": [
+    {
+      "day": 1,
+      "source": "Manual principal, Parte 3 / D1",
+      "delivery": "Professional package structure and frozen baseline.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 1",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "6b9aa17cf3f85c9f2f883814fb3a259ca771ba70",
+              "message": "refactor: Day 1 - freeze baseline, scaffold src/ tests/ artifacts/ cloud/ .github/"
+            }
+          ]
+        },
+        {
+          "kind": "directory",
+          "target": "src/data",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "directory",
+          "target": "src/features",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "directory",
+          "target": "src/models",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "directory",
+          "target": "src/api",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "directory",
+          "target": "tests",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "directory",
+          "target": "artifacts",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "directory",
+          "target": "docs",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "src/config.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "artifacts/baseline_metrics.json",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/BASELINE.md",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "src/config.py",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "RANDOM_STATE",
+            "MODEL_FEATURES",
+            "MIN_AVERAGE_PRECISION",
+            "MIN_RECALL_AT_2PCT_PRECISION"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 2,
+      "source": "Manual principal, Parte 3 / D2",
+      "delivery": "Schema-validated raw-data loading with actionable errors.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 2",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "95a86f8588c58d01ead86c2ee9c240419834b091",
+              "message": "feat(data): Day 2 - schema-validated CSV loader with clear error messages"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "src/data/load_data.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "tests/test_data_loading.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "scripts/smoke_test_day2.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "src/data/load_data.py",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "SchemaValidationError",
+            "validate_schema"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 3,
+      "source": "Manual principal, Parte 3 / D3",
+      "delivery": "Feature parity, no-target proof and leakage-safe features.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 3",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "0bd6db970ee03e3ecde619d11d47f37fa3e30478",
+              "message": "fix(features): Day 3 - remove dtype drift; add parity + no-target checks"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "src/features/build_features.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "scripts/verify_features_parity.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "tests/test_features.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "src/features/build_features.py",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "sender_previous_tx_count",
+            "cumcount"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 4,
+      "source": "Manual principal, Parte 3 / D4",
+      "delivery": "Reproducible training with frozen hyperparameters.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 4",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "55e15bacaa7e9dea85fe5fe8c5741a4e8f64489a",
+              "message": "feat(models): Day 4 - reproducible training with alignment fix and gate PASS"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "src/models/train.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "tests/test_train.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "src/models/train.py",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "prepare_train_test_split",
+            "scale_pos_weight"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 5,
+      "source": "Manual principal, Parte 3 / D5",
+      "delivery": "Absolute quality gate and relative regression gate.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 5",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "70207651b9e5a234b0680b88996fcbe145e06294",
+              "message": "feat(models): Day 5 - regression-gated evaluation vs frozen baseline"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "src/models/evaluate.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "artifacts/baseline_metrics.json",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "src/models/evaluate.py",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "quality_gate",
+            "regression_gate"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 6,
+      "source": "Manual principal, Parte 3 / D6",
+      "delivery": "Unified cached prediction contract.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 6",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "c6607d86487a9e6252fcba2c70e8eb5cbd6e5e46",
+              "message": "feat(models): Day 6 - unified prediction contract with in-process model cache"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "src/models/predict.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "scripts/verify_predict.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "tests/test_predict.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "src/models/predict.py",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "predict_transaction",
+            "predict_batch",
+            "risk_score"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 7,
+      "source": "Git history between Volumes 1 and 3",
+      "delivery": "Formal pytest suite and Ruff hygiene.",
+      "checks": [
+        {
+          "kind": "git_commit",
+          "target": "8f20dacb59c43601d826365d66e68726ef147c3c",
+          "passed": true,
+          "detail": "commit present"
+        },
+        {
+          "kind": "git_history",
+          "target": "Day 7",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "8f20dacb59c43601d826365d66e68726ef147c3c",
+              "message": "test: Day 7 - formal pytest suite (24 tests) + ruff hygiene"
+            }
+          ]
+        },
+        {
+          "kind": "directory",
+          "target": "tests",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "pyproject.toml",
+          "passed": true,
+          "detail": "present"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 8,
+      "source": "Manual Volume 3",
+      "delivery": "FastAPI administrative endpoints and model lifecycle.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 8",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "5a527a0dea3be31d2c2b87007cceea6667a0c109",
+              "message": "feat(api): Day 8 - FastAPI service with /health and /model-info"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "src/api/main.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "tests/test_api.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "src/api/main.py",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "/health",
+            "/model-info"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 9,
+      "source": "Manual Volume 3",
+      "delivery": "Validated single and batch prediction endpoints.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 9",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "93ae4ac3a444d6f040f0404fa8a9bab49ba6aff0",
+              "message": "feat(api): Day 9 - /predict and /predict-batch with Pydantic validation"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "src/api/main.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "tests/test_api.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "src/api/main.py",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "/predict",
+            "/predict-batch"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 10,
+      "source": "Manual Volume 3",
+      "delivery": "Portable Docker image and Docker Compose service.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 10",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "de3c118e49d5e146c2eb077b600b8ebb51070310",
+              "message": "feat(deploy): Day 10 - Dockerfile, .dockerignore, working docker-compose"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "Dockerfile",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docker-compose.yml",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": ".dockerignore",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "Dockerfile",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "HEALTHCHECK"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 11,
+      "source": "Manual Volume 4",
+      "delivery": "GitHub Actions CI with Python and Dockerfile checks.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 11",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "1907e9f0b510ef3383321cf5d9653fbf38781279",
+              "message": "ci: Day 11 - GitHub Actions workflow with pytest, ruff, hadolint + status badge"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": ".github/workflows/ci.yml",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": ".github/workflows/ci.yml",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "pytest",
+            "ruff",
+            "hadolint"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 12,
+      "source": "Manual Volume 4",
+      "delivery": "Quality-gated Docker publication to GHCR.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 12",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "385732db6164e57a2dd218ac24ec8540e64933c7",
+              "message": "ci: Day 12 - publish Docker image to GHCR"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": ".github/workflows/ci.yml",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": ".github/workflows/ci.yml",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "ghcr.io",
+            "docker/build-push-action"
+          ]
+        },
+        {
+          "kind": "content",
+          "target": "README.md",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "ghcr.io/caiobernardinelli/amlguard"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 13,
+      "source": "Manual Volume 5",
+      "delivery": "MLflow experiment tracking with SQLite provenance.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 13",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "865c09a6551d3b877192a7150948aa7fe8b4f077",
+              "message": "feat(mlops): Day 13 - track training experiments with MLflow"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "src/models/tracking.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "tests/test_tracking.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "src/models/tracking.py",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "sqlite",
+            "mlflow"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 14,
+      "source": "Manual Volume 5",
+      "delivery": "MLflow PyFunc packaging and candidate/champion promotion.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 14",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "3281ae8b9f3b23a15fdf25aa2f8e1d53ce499662",
+              "message": "feat(mlops): Day 14 - package and version model with MLflow"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "src/models/mlflow_model.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "tests/test_mlflow_model.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/MODEL_PROMOTION.md",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "docs/MODEL_PROMOTION.md",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "candidate",
+            "champion"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 15,
+      "source": "Manual Volume 6",
+      "delivery": "Azure ML workspace foundation and resource governance.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 15",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "8e3c3aa3ab41860406f78cdd331525b2814dbbbd",
+              "message": "feat(cloud): Day 15 - provision Azure ML workspace foundation"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": ".env.example",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/AZURE_RESOURCES.md",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "docs/AZURE_RESOURCES.md",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "rg-amlguard-dev-brazilsouth",
+            "mlw-amlguard-dev"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 16,
+      "source": "Manual Volume 6",
+      "delivery": "Versioned Azure Data Asset and training Environment.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 16",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "806841b64d1553abaa491e0235dbdb81bc134d5f",
+              "message": "feat(cloud): Day 16 - register data asset and validate Azure ML environment"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "cloud/azure/data/ibm_aml_hi_small.yml",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "cloud/azure/environment/conda.yml",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "cloud/azure/environment/environment.yml",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "cloud/azure/jobs/day16_smoke.yml",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/AZURE_DATA_ENVIRONMENT.md",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/evidence/day16_smoke_summary.json",
+          "passed": true,
+          "detail": "present"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 17,
+      "source": "Manual Volume 6",
+      "delivery": "Reusable prepare, train and evaluate Azure ML components.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 17",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "7f543adbe4f2d8a453546ae0c86fa487bbf37590",
+              "message": "feat(cloud): Day 17 - add and validate Azure ML pipeline components"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "cloud/azure/components/prepare_data/component.yml",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "cloud/azure/components/train_model/component.yml",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "cloud/azure/components/evaluate_model/component.yml",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/AZURE_COMPONENTS.md",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/evidence/day17_evaluation_metrics.json",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "docs/evidence/day17_evaluation_metrics.json",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "\"status\": \"PASS\"",
+            "\"quality_gate\"",
+            "\"regression_gate\""
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 18,
+      "source": "Versioned repository evidence",
+      "delivery": "End-to-end Azure ML pipeline and gated model registration.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 18",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "b949cf3689da06deadbe118e9b8db196a27f3b6b",
+              "message": "feat(cloud): Day 18 - run end-to-end Azure ML pipeline and register model"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "cloud/azure/jobs/day18_pipeline.yml",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/AZURE_PIPELINE.md",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/evidence/day18_evaluation_metrics.json",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "docs/evidence/day18_evaluation_metrics.json",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "\"status\": \"PASS\"",
+            "\"quality_gate\"",
+            "\"regression_gate\""
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 19,
+      "source": "Versioned repository evidence",
+      "delivery": "Managed Online Endpoint and validated cloud inference.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 19",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "4ca80a7369fe301635e4d7afb2e5a7dd68ba65c9",
+              "message": "feat(cloud): Day 19 - deploy Azure ML managed online endpoint"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "cloud/azure/online/deployment.yml",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "cloud/azure/online/score.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/AZURE_ONLINE_ENDPOINT.md",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/evidence/day19_online_endpoint.json",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "docs/evidence/day19_online_endpoint.json",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "\"status\": \"PASS\"",
+            "\"threshold\"",
+            "\"model_version\""
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 20,
+      "source": "Manual Volume 7 and versioned repository evidence",
+      "delivery": "Operational/model monitoring, drift and retraining policy.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 20",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "557234415c47506d0443350a8b2696f30f042558",
+              "message": "feat(monitoring): Day 20 - add observability drift and retraining strategy"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "docs/AZURE_MONITORING.md",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/RETRAINING_STRATEGY.md",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/evidence/day20_operational_observability.json",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/evidence/day20_data_collection_validation.json",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/evidence/day20_drift_report.json",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/evidence/day20_retraining_strategy.json",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "docs/evidence/day20_retraining_strategy.json",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "\"status\": \"PASS\"",
+            "DO_NOT_RETRAIN"
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 21,
+      "source": "Versioned repository evidence",
+      "delivery": "Validated local recruiter-facing Streamlit demo.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 21",
+          "passed": true,
+          "detail": "1 matching commit(s)",
+          "commits": [
+            {
+              "sha": "64fb156a7d1c26545e32add21b5e83439f6f3ee7",
+              "message": "feat(demo): Day 21 - add validated recruiter Streamlit demo"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "demo/app.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "scripts/demo/validate_day21_recruiter_demo.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/RECRUITER_DEMO.md",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/evidence/day21_recruiter_demo.json",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "docs/evidence/day21_recruiter_demo.json",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "\"status\": \"PASS\"",
+            "\"risk_score\""
+          ]
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "day": 22,
+      "source": "Versioned repository evidence",
+      "delivery": "Public Streamlit Community Cloud deployment.",
+      "checks": [
+        {
+          "kind": "git_history",
+          "target": "Day 22",
+          "passed": true,
+          "detail": "2 matching commit(s)",
+          "commits": [
+            {
+              "sha": "81c09a90ee4ea847dbc251f9d10ae402d297e704",
+              "message": "feat(demo): Day 22 - publish validated Streamlit recruiter demo"
+            },
+            {
+              "sha": "9107a522d6682a7d0e4b3d6603775a7d7cfead53",
+              "message": "feat(demo): Day 22 - prepare Streamlit Community Cloud deployment"
+            }
+          ]
+        },
+        {
+          "kind": "file",
+          "target": "demo/requirements.txt",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "scripts/demo/record_day22_public_deployment.py",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "file",
+          "target": "docs/evidence/day22_public_deployment.json",
+          "passed": true,
+          "detail": "present"
+        },
+        {
+          "kind": "content",
+          "target": "docs/evidence/day22_public_deployment.json",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "\"status\": \"PASS\"",
+            "https://amlguard-demo.streamlit.app",
+            "\"python_version\": \"3.12\""
+          ]
+        },
+        {
+          "kind": "content",
+          "target": "README.md",
+          "passed": true,
+          "detail": "all tokens present",
+          "tokens": [
+            "https://amlguard-demo.streamlit.app"
+          ]
+        }
+      ],
+      "status": "PASS"
+    }
+  ],
+  "global_checks": {
+    "status": "PASS",
+    "broken_local_markdown_links": [],
+    "tracked_hygiene_failures": [],
+    "public_url_checks": {
+      "README.md": true,
+      "docs/RECRUITER_DEMO.md": true
+    }
+  },
+  "failed_days": [],
+  "failed_checks": [],
+  "limitations": [
+    "Days 1-17 are historical artifact audits guided by the study manuals; the audit does not rerun every historical cloud or training job.",
+    "Azure resources are not recreated. The Managed Online Endpoint remains deleted to avoid continuous inference-compute cost.",
+    "The Day 20 monitoring batch was synthetic and demonstrates monitoring mechanics, not real production drift.",
+    "The public Streamlit demo is a portfolio interface and not a production AML decision system."
+  ]
+}

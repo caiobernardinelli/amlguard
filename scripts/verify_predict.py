@@ -24,7 +24,6 @@ import pandas as pd
 
 from src.config import FINAL_THRESHOLD, MODEL_FEATURES, MODEL_PATH, MODEL_VERSION
 from src.data.load_data import load_raw_transactions
-from src.features import build_model_features
 from src.models.predict import (
     PredictionInputError,
     get_model,
@@ -123,7 +122,7 @@ def main() -> int:
         print(f"  RAISED PredictionInputError:\n    {e}\n")
 
     print("=" * 72)
-    print(f"DAY 6 PREDICTION CONTRACT VERIFIED")
+    print("DAY 6 PREDICTION CONTRACT VERIFIED")
     print(f"  threshold  : {FINAL_THRESHOLD}")
     print(f"  version    : {MODEL_VERSION}")
     print("=" * 72)

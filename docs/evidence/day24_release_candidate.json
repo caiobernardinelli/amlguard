@@ -1,0 +1,191 @@
+{
+  "day": 24,
+  "scope": "final_release_candidate",
+  "status": "PASS",
+  "captured_at_utc": "2026-07-21T21:17:55.039547+00:00",
+  "release": {
+    "version": "1.0.0",
+    "planned_tag": "v1.0.0",
+    "tag_available_before_release": true
+  },
+  "version_domains": {
+    "project_release": "v1.0.0",
+    "python_package": "1.0.0",
+    "frozen_model_contract": "0.1.0",
+    "azure_ml_model_asset": "AMLGuard:1"
+  },
+  "repository": {
+    "branch": "main",
+    "audited_commit": "aa67cc3d16c00ca2cc241f8953653bf44db39781",
+    "unexpected_worktree_entries": []
+  },
+  "artifact": {
+    "path": "artifacts/model.joblib",
+    "sha256": "b9c069b8fe40f7d905b59a1af6ba2d9c21b1c848daf5c78fbbd50ad94cfe1d2e",
+    "expected_sha256": "b9c069b8fe40f7d905b59a1af6ba2d9c21b1c848daf5c78fbbd50ad94cfe1d2e"
+  },
+  "manuals": {
+    "count": 7,
+    "paths": [
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol1_Notebook_ao_Pipeline_MLOps.pdf",
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol2_FastAPI_Pydantic_Docker.pdf",
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol3_CI_CD_GitHub_Actions_GHCR.pdf",
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol4_MLflow_Tracking_Model_Registry.pdf",
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol5_Azure_ML_Cloud_Deploy.pdf",
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol6_Observability_Drift_Retraining.pdf",
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol7_Demo_Portfolio_Release.pdf"
+    ],
+    "index_checks": {
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol1_Notebook_ao_Pipeline_MLOps.pdf": true,
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol2_FastAPI_Pydantic_Docker.pdf": true,
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol3_CI_CD_GitHub_Actions_GHCR.pdf": true,
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol4_MLflow_Tracking_Model_Registry.pdf": true,
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol5_Azure_ML_Cloud_Deploy.pdf": true,
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol6_Observability_Drift_Retraining.pdf": true,
+      "docs/manuals/AMLGuard_Manual_Estudo_Vol7_Demo_Portfolio_Release.pdf": true
+    },
+    "stale_volume_references": []
+  },
+  "prior_evidence": [
+    {
+      "path": "docs/evidence/day18_evaluation_metrics.json",
+      "exists": true,
+      "status": "PASS",
+      "passed": true
+    },
+    {
+      "path": "docs/evidence/day19_online_endpoint.json",
+      "exists": true,
+      "status": "PASS",
+      "passed": true
+    },
+    {
+      "path": "docs/evidence/day20_data_collection_validation.json",
+      "exists": true,
+      "status": "PASS",
+      "passed": true
+    },
+    {
+      "path": "docs/evidence/day20_drift_report.json",
+      "exists": true,
+      "status": "PASS",
+      "passed": true
+    },
+    {
+      "path": "docs/evidence/day20_retraining_strategy.json",
+      "exists": true,
+      "status": "PASS",
+      "passed": true
+    },
+    {
+      "path": "docs/evidence/day21_recruiter_demo.json",
+      "exists": true,
+      "status": "PASS",
+      "passed": true
+    },
+    {
+      "path": "docs/evidence/day22_public_deployment.json",
+      "exists": true,
+      "status": "PASS",
+      "passed": true
+    },
+    {
+      "path": "docs/evidence/day23_portfolio_readiness.json",
+      "exists": true,
+      "status": "PASS",
+      "passed": true
+    }
+  ],
+  "day23_contract": {
+    "status_pass": true,
+    "contains_22_days": true,
+    "all_days_pass": true
+  },
+  "documentation_checks": {
+    "readme_public_url": true,
+    "readme_release_version": true,
+    "readme_24_day_delivery": true,
+    "readme_final_release_link": true,
+    "release_doc_version": true,
+    "release_doc_model_version": true,
+    "release_doc_azure_asset": true,
+    "release_doc_manual_index": true,
+    "release_notes_public_url": true,
+    "manual_index_complete": true,
+    "no_stale_volume_8_references": true
+  },
+  "quality_commands": {
+    "ruff": {
+      "command": [
+        "C:\\Users\\cfber\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\python.exe",
+        "-m",
+        "ruff",
+        "check",
+        "src",
+        "tests",
+        "demo",
+        "scripts"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "output": "All checks passed!"
+    },
+    "pytest": {
+      "command": [
+        "C:\\Users\\cfber\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\python.exe",
+        "-m",
+        "pytest",
+        "-o",
+        "addopts=",
+        "-q"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "output": "........................................................                 [100%]\n============================== warnings summary ===============================\n..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python312\\site-packages\\fastapi\\testclient.py:1\n  C:\\Users\\cfber\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python312\\site-packages\\fastapi\\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.\n    from starlette.testclient import TestClient as TestClient  # noqa\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n56 passed, 1 warning in 9.17s",
+      "test_count": 56,
+      "expected_test_count": 56
+    },
+    "git_diff_check": {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "output": "warning: in the working copy of 'scripts/audit/validate_day24_release_candidate.py', LF will be replaced by CRLF the next time Git touches it"
+    }
+  },
+  "repository_checks": {
+    "missing_required_files": [],
+    "broken_local_markdown_links": [],
+    "tracked_hygiene_failures": []
+  },
+  "checks": {
+    "branch_is_main": true,
+    "required_files_present": true,
+    "package_version_is_1_0_0": true,
+    "model_version_remains_0_1_0": true,
+    "model_sha256_unchanged": true,
+    "prior_evidence_pass": true,
+    "day23_contract_pass": true,
+    "documentation_contract_pass": true,
+    "seven_manuals_present": true,
+    "release_tag_available": true,
+    "ruff_pass": true,
+    "pytest_56_pass": true,
+    "git_diff_check_pass": true,
+    "local_markdown_links_pass": true,
+    "tracked_hygiene_pass": true,
+    "no_unexpected_worktree_entries": true
+  },
+  "limitations": [
+    "The IBM AML dataset is synthetic.",
+    "The model score is not a calibrated probability.",
+    "Predictions require human review.",
+    "Day 20 monitoring traffic was synthetic.",
+    "The Azure Managed Online Endpoint remains deleted for cost control.",
+    "The public Streamlit demo is not covered by a production SLA.",
+    "Release-candidate evidence is generated before the final commit and annotated tag are created."
+  ]
+}

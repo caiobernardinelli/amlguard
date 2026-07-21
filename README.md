@@ -8,10 +8,11 @@
 ![XGBoost](https://img.shields.io/badge/XGBoost-2.0%2B-brightgreen)
 ![SHAP](https://img.shields.io/badge/Explainability-SHAP-purple)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
+![Release](https://img.shields.io/badge/release-v1.0.0-blueviolet)
 
 > **Live recruiter demo:** [Open AMLGuard on Streamlit](https://amlguard-demo.streamlit.app) — public inference with the frozen model artifact, validated on Python 3.12.
 
-> **Skills demonstrated:** fraud detection · anomaly detection · imbalanced classification · precision–recall / PR-AUC (Average Precision) · feature engineering · data-leakage prevention · threshold tuning · cost-sensitive learning · XGBoost · Random Forest · Logistic Regression · SHAP explainability · model evaluation · **FastAPI + Pydantic serving** · **Docker (multi-stage, GHCR)** · **CI/CD (GitHub Actions)** · **MLflow tracking & model registry** · **Azure ML pipelines** · **Azure ML Managed Online Endpoints** · **Azure Monitor** · **Model Data Collector** · **model monitoring** · **data drift / prediction drift (PSI)** · **retraining strategy** · **real-time inference** · **cloud model deployment** · **public Streamlit recruiter demo** · pytest (56 tests) · reproducibility engineering · **portfolio-readiness audit**.
+> **Skills demonstrated:** fraud detection · anomaly detection · imbalanced classification · precision–recall / PR-AUC (Average Precision) · feature engineering · data-leakage prevention · threshold tuning · cost-sensitive learning · XGBoost · Random Forest · Logistic Regression · SHAP explainability · model evaluation · **FastAPI + Pydantic serving** · **Docker (multi-stage, GHCR)** · **CI/CD (GitHub Actions)** · **MLflow tracking & model registry** · **Azure ML pipelines** · **Azure ML Managed Online Endpoints** · **Azure Monitor** · **Model Data Collector** · **model monitoring** · **data drift / prediction drift (PSI)** · **retraining strategy** · **real-time inference** · **cloud model deployment** · **public Streamlit recruiter demo** · pytest (56 tests) · reproducibility engineering · **portfolio-readiness audit** · **release engineering**.
 
 ---
 
@@ -100,7 +101,7 @@ Global feature contributions for the selected XGBoost model. Explanations improv
 
 ## Production architecture (Phase 2 — delivered)
 
-The academic notebook was refactored into a tested, containerised, cloud-deployed and monitored service over a 20-day MLOps delivery schedule. Every model-changing step is gated against the frozen baseline in [`artifacts/baseline_metrics.json`](./artifacts/baseline_metrics.json): a refactor is only accepted if it reproduces the validated metrics, and model promotion occurs only after explicit quality and regression gates pass.
+The academic notebook was refactored into a tested, containerised, cloud-deployed and monitored service over a 24-day end-to-end delivery schedule. Every model-changing step is gated against the frozen baseline in [`artifacts/baseline_metrics.json`](./artifacts/baseline_metrics.json): a refactor is only accepted if it reproduces the validated metrics, and model promotion occurs only after explicit quality and regression gates pass.
 
 | Layer | What exists | Proof |
 |---|---|---|
@@ -114,6 +115,7 @@ The academic notebook was refactored into a tested, containerised, cloud-deploye
 | **Monitoring & drift** | Azure Monitor latency/traffic telemetry, Azure ML Model Data Collector, paired input/output telemetry, alert-rate and score monitoring, PSI-based data/prediction drift workflow and retraining policy | [`docs/AZURE_MONITORING.md`](./docs/AZURE_MONITORING.md) |
 | **Recruiter demo** | Public Streamlit Community Cloud application backed by the frozen `artifacts/model.joblib`; Python 3.12 runtime and score/alert/threshold/model-version parity validated through a live browser submission | [Live app](https://amlguard-demo.streamlit.app) · [documentation](./docs/RECRUITER_DEMO.md) · [evidence](./docs/evidence/day22_public_deployment.json) |
 | **Portfolio readiness** | Manual-guided and repository-backed audit of Days 1-22, including exact Git history, evidence files, local-link checks and tracked-file hygiene | [documentation](./docs/PORTFOLIO_READINESS.md) · [evidence](./docs/evidence/day23_portfolio_readiness.json) |
+| **Final release** | Versioned `v1.0.0` portfolio release with final quality gate, changelog, release notes and study manual; the frozen model contract remains `0.1.0` | [documentation](./docs/FINAL_RELEASE.md) · [release notes](./docs/RELEASE_NOTES_v1.0.0.md) |
 
 **Reproducibility, proven in the cloud:** the Azure ML end-to-end pipeline retrained and re-evaluated the model on Azure compute and reproduced the frozen baseline — Average Precision `0.036833` in the cloud vs `0.036833` frozen locally. Only after both quality and regression gates passed was `AMLGuard:1` registered ([pipeline evidence](./docs/evidence/day18_evaluation_metrics.json)).
 
@@ -124,6 +126,8 @@ The academic notebook was refactored into a tested, containerised, cloud-deploye
 **Recruiter demo, validated publicly:** the Streamlit Community Cloud application at [https://amlguard-demo.streamlit.app](https://amlguard-demo.streamlit.app) calls the same persisted AMLGuard prediction contract. A live browser submission reproduced the validated displayed score `0.9854`, alert decision, frozen threshold `0.892163` and model version `0.1.0` on Python 3.12 ([demo docs](./docs/RECRUITER_DEMO.md); [Day 22 evidence](./docs/evidence/day22_public_deployment.json)).
 
 **Portfolio readiness, audited:** Day 23 cross-checks the intended deliveries from Days 1-22 against the study manuals, current repository artifacts, exact Git history and structured evidence. The permanent validator also checks local Markdown links, tracked-file hygiene and public-demo references ([audit documentation](./docs/PORTFOLIO_READINESS.md); [Day 23 evidence](./docs/evidence/day23_portfolio_readiness.json)).
+
+**Final release candidate:** Day 24 packages the complete project as `v1.0.0`, while preserving the frozen model contract as `0.1.0`. The release gate reruns Ruff and all 56 tests, verifies the model artifact hash, checks prior evidence and requires the final Volume 7 study manual ([release documentation](./docs/FINAL_RELEASE.md); [release notes](./docs/RELEASE_NOTES_v1.0.0.md)).
 
 ### Run the service without installing anything (Docker)
 
@@ -177,6 +181,7 @@ amlguard/
 ├── Dockerfile                       # multi-stage build (671 MB runtime image)
 ├── docker-compose.yml               # one-command local boot with model bind-mount
 ├── .github/workflows/ci.yml         # ruff + pytest + hadolint + GHCR publish
+├── CHANGELOG.md                     # portfolio release history
 └── pyproject.toml
 ```
 
@@ -195,7 +200,7 @@ pip install -e ".[serve,dev,demo]"
 
 # 3. Verify the refactored pipeline (no dataset needed — fixtures are synthetic)
 pytest            # expected: 56 passed
-ruff check src/ tests/ demo/ scripts/demo/
+python -m ruff check src tests demo scripts
 
 # 4. Full training on the real dataset (downloads the 476 MB CSV on first run)
 python -m src.models.train        # writes artifacts/model.joblib, gate must PASS
@@ -234,7 +239,7 @@ The core MLOps stack (FastAPI · Docker/GHCR · CI/CD · MLflow · Azure ML pipe
 | 5 | Sensitivity analysis without `same_account` | Quantify dependence on a possibly confounded signal |
 | 6 | SMOTENC / cost-sensitive comparison | Category-aware resampling |
 | 7 | Probability calibration | Stable, interpretable risk scores |
-| 8 | Production monitoring dashboards + analyst triage workflow | Richer long-running operational views and a production-oriented analyst layer; the lightweight recruiter-facing Streamlit demo is already delivered locally |
+| 8 | Production monitoring dashboards + analyst triage workflow | Richer long-running operational views and a production-oriented analyst layer; the lightweight recruiter-facing Streamlit demo is already delivered publicly |
 
 ---
 

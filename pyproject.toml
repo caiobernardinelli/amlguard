@@ -1,6 +1,6 @@
 [project]
 name = "amlguard"
-version = "0.1.0"
+version = "1.0.0"
 description = "Anti-money-laundering detection under extreme class imbalance"
 readme = "README.md"
 requires-python = ">=3.10"

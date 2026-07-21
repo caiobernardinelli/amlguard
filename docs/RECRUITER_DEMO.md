@@ -6,8 +6,9 @@ The Recruiter Demo is a lightweight Streamlit interface that lets a reviewer
 enter a synthetic transaction profile and obtain a score from the same
 persisted AMLGuard model used by the project's local prediction contract.
 
-The Day 21 deliverable is a **validated local demo**. Public hosting is planned
-for the next delivery step and is not claimed as delivered here.
+Day 21 delivered the **validated local demo**. Day 22 deployed the same
+interface publicly on Streamlit Community Cloud and validated a live
+browser submission against the frozen prediction contract.
 
 ## Entry point
 
@@ -20,6 +21,31 @@ Local command:
 ```bash
 python -m streamlit run demo/app.py
 ```
+
+## Public deployment
+
+Live application:
+
+```text
+https://amlguard-demo.streamlit.app
+```
+
+Deployment contract:
+
+| Setting | Validated value |
+| --- | --- |
+| Platform | Streamlit Community Cloud |
+| Repository | `caiobernardinelli/amlguard` |
+| Branch | `main` |
+| Entrypoint | `demo/app.py` |
+| Dependency file | `demo/requirements.txt` |
+| Python runtime | `3.12` |
+| Secrets required | No |
+
+The first deployment used the platform default Python `3.14.6` runtime and failed
+while importing the persisted-model dependency chain. The app was deleted and
+recreated with Python `3.12`, matching the validated local environment. The
+recreated deployment loaded successfully and produced the expected live result.
 
 The application calls:
 
@@ -134,6 +160,45 @@ The validator checks:
 
 Day 21 acceptance result: `PASS`.
 
+## Day 22 public validation
+
+Permanent evidence recorder:
+
+```text
+scripts/demo/record_day22_public_deployment.py
+```
+
+Run:
+
+```bash
+python scripts/demo/record_day22_public_deployment.py
+```
+
+Evidence:
+
+```text
+docs/evidence/day22_public_deployment.json
+```
+
+The Day 22 acceptance check combined repository-side contract validation with a
+manual public-browser test. Using the default synthetic form values, the live
+application displayed:
+
+```json
+{
+  "risk_score_display": 0.9854,
+  "is_alert": true,
+  "threshold": 0.892163,
+  "model_version": "0.1.0"
+}
+```
+
+The public URL rendered successfully and the form submission completed. Direct
+`urllib` checks were not used as an availability gate because the Community
+Cloud routing layer returned repeated HTTP `303` redirects to that client.
+
+Day 22 acceptance result: `PASS`.
+
 ## CI coverage
 
 The GitHub Actions Python job now installs the `demo` optional dependency group
@@ -159,9 +224,9 @@ Recruiter Demo
     -> provides a low-cost public portfolio experience
 ```
 
-The public deployment step should prefer a free-tier or scale-to-zero hosting
-option. A continuously provisioned Azure ML endpoint is not required merely to
-keep the portfolio demo accessible.
+Day 22 deployed the portfolio interface on Streamlit Community Cloud. The
+continuously provisioned Azure ML endpoint remains deleted and is not required
+for the public recruiter experience.
 
 ## Limitations
 
@@ -169,6 +234,7 @@ keep the portfolio demo accessible.
 - The demo is a portfolio interface, not a production AML decision system.
 - Model outputs require human review and must not be treated as autonomous
   compliance decisions.
-- The Day 21 demo is local; no public URL is claimed yet.
-- Public-hosting availability and cold-start behaviour will be documented only
-  after deployment is actually validated.
+- Public availability depends on Streamlit Community Cloud and may include
+  platform cold starts or temporary service interruptions.
+- Day 22 validates browser rendering and one successful live inference; it
+  does not constitute a production availability SLA.

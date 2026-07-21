@@ -9,7 +9,9 @@
 ![SHAP](https://img.shields.io/badge/Explainability-SHAP-purple)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-> **Skills demonstrated:** fraud detection · anomaly detection · imbalanced classification · precision–recall / PR-AUC (Average Precision) · feature engineering · data-leakage prevention · threshold tuning · cost-sensitive learning · XGBoost · Random Forest · Logistic Regression · SHAP explainability · model evaluation · **FastAPI + Pydantic serving** · **Docker (multi-stage, GHCR)** · **CI/CD (GitHub Actions)** · **MLflow tracking & model registry** · **Azure ML pipelines** · **Azure ML Managed Online Endpoints** · **Azure Monitor** · **Model Data Collector** · **model monitoring** · **data drift / prediction drift (PSI)** · **retraining strategy** · **real-time inference** · **cloud model deployment** · **Streamlit recruiter demo** · pytest (56 tests) · reproducibility engineering.
+> **Live recruiter demo:** [Open AMLGuard on Streamlit](https://amlguard-demo.streamlit.app) — public inference with the frozen model artifact, validated on Python 3.12.
+
+> **Skills demonstrated:** fraud detection · anomaly detection · imbalanced classification · precision–recall / PR-AUC (Average Precision) · feature engineering · data-leakage prevention · threshold tuning · cost-sensitive learning · XGBoost · Random Forest · Logistic Regression · SHAP explainability · model evaluation · **FastAPI + Pydantic serving** · **Docker (multi-stage, GHCR)** · **CI/CD (GitHub Actions)** · **MLflow tracking & model registry** · **Azure ML pipelines** · **Azure ML Managed Online Endpoints** · **Azure Monitor** · **Model Data Collector** · **model monitoring** · **data drift / prediction drift (PSI)** · **retraining strategy** · **real-time inference** · **cloud model deployment** · **public Streamlit recruiter demo** · pytest (56 tests) · reproducibility engineering.
 
 ---
 
@@ -110,7 +112,7 @@ The academic notebook was refactored into a tested, containerised, cloud-deploye
 | **Cloud pipeline** | Azure ML workspace, versioned data asset, reusable command components (prepare / train / evaluate), end-to-end pipeline, gated promotion and registered `AMLGuard:1` model asset | [`docs/AZURE_PIPELINE.md`](./docs/AZURE_PIPELINE.md) |
 | **Real-time cloud inference** | Azure ML Managed Online Endpoint was deployed and validated with key authentication, dedicated inference environment, `blue` deployment and 100% traffic routing; it was later deleted after monitoring validation to stop continuous inference-compute cost | [`docs/AZURE_ONLINE_ENDPOINT.md`](./docs/AZURE_ONLINE_ENDPOINT.md) |
 | **Monitoring & drift** | Azure Monitor latency/traffic telemetry, Azure ML Model Data Collector, paired input/output telemetry, alert-rate and score monitoring, PSI-based data/prediction drift workflow and retraining policy | [`docs/AZURE_MONITORING.md`](./docs/AZURE_MONITORING.md) |
-| **Recruiter demo** | Local Streamlit interface backed by the frozen `artifacts/model.joblib`; validated score/alert/threshold/model-version parity and cost-aware separation from the deleted Azure endpoint | [`docs/RECRUITER_DEMO.md`](./docs/RECRUITER_DEMO.md) |
+| **Recruiter demo** | Public Streamlit Community Cloud application backed by the frozen `artifacts/model.joblib`; Python 3.12 runtime and score/alert/threshold/model-version parity validated through a live browser submission | [Live app](https://amlguard-demo.streamlit.app) · [documentation](./docs/RECRUITER_DEMO.md) · [evidence](./docs/evidence/day22_public_deployment.json) |
 
 **Reproducibility, proven in the cloud:** the Azure ML end-to-end pipeline retrained and re-evaluated the model on Azure compute and reproduced the frozen baseline — Average Precision `0.036833` in the cloud vs `0.036833` frozen locally. Only after both quality and regression gates passed was `AMLGuard:1` registered ([pipeline evidence](./docs/evidence/day18_evaluation_metrics.json)).
 
@@ -118,7 +120,7 @@ The academic notebook was refactored into a tested, containerised, cloud-deploye
 
 **Monitoring, proven on the live endpoint:** Azure Monitor recorded successful 2xx traffic and server-side latency telemetry; Azure ML Model Data Collector persisted and paired 71 `model_inputs` / `model_outputs` records. A synthetic monitoring batch exercised alert-rate, score-distribution, data-drift and prediction-drift analysis. Significant PSI signals are documented as a monitoring-workflow demonstration only—not as evidence of real production drift ([monitoring docs](./docs/AZURE_MONITORING.md)).
 
-**Recruiter demo, validated locally:** a Streamlit interface calls the same persisted AMLGuard prediction contract and reproduces the validated score, alert, frozen threshold and model version. Day 21 validates the local application only; a public URL is intentionally not claimed until the deployment step is completed ([demo docs](./docs/RECRUITER_DEMO.md)).
+**Recruiter demo, validated publicly:** the Streamlit Community Cloud application at [https://amlguard-demo.streamlit.app](https://amlguard-demo.streamlit.app) calls the same persisted AMLGuard prediction contract. A live browser submission reproduced the validated displayed score `0.9854`, alert decision, frozen threshold `0.892163` and model version `0.1.0` on Python 3.12 ([demo docs](./docs/RECRUITER_DEMO.md); [Day 22 evidence](./docs/evidence/day22_public_deployment.json)).
 
 ### Run the service without installing anything (Docker)
 
@@ -160,7 +162,9 @@ amlguard/
 ├── tests/                           # 56 tests, CSV-free (synthetic fixtures)
 ├── cloud/azure/                     # Azure ML: data, components, pipelines, online serving
 │   └── online/                      # endpoint, monitored deployment, inference env, score.py
-├── demo/app.py                      # Streamlit recruiter-facing transaction risk demo
+├── demo/
+│   ├── app.py                       # Public Streamlit recruiter-facing demo
+│   └── requirements.txt             # Pinned Community Cloud runtime
 ├── scripts/monitoring/              # synthetic traffic, collection validation, drift reporting
 ├── scripts/demo/                    # recruiter-demo validation and evidence generation
 ├── artifacts/model.joblib           # frozen small model artifact used by the recruiter demo

@@ -1,0 +1,79 @@
+{
+  "day": 22,
+  "scope": "public_recruiter_demo_deployment",
+  "status": "PASS",
+  "captured_at_utc": "2026-07-21T05:07:16.077514+00:00",
+  "source": {
+    "repository": "caiobernardinelli/amlguard",
+    "branch": "main",
+    "git_commit": "9107a522d6682a7d0e4b3d6603775a7d7cfead53",
+    "entrypoint": "demo/app.py",
+    "requirements_file": "demo/requirements.txt"
+  },
+  "deployment": {
+    "platform": "Streamlit Community Cloud",
+    "public_url": "https://amlguard-demo.streamlit.app",
+    "python_version": "3.12",
+    "azure_managed_online_endpoint_required": false,
+    "secrets_required": false
+  },
+  "validated_input": {
+    "Payment Format": "ACH",
+    "Amount Paid": 13701.3,
+    "sender_previous_tx_count": 238,
+    "is_business_hours": 0,
+    "same_account": 0
+  },
+  "validated_output": {
+    "risk_score_full_local_contract": 0.985365629196167,
+    "risk_score_display_confirmed_publicly": 0.9854,
+    "is_alert_confirmed_publicly": true,
+    "threshold_confirmed_publicly": 0.892163,
+    "model_version_confirmed_publicly": "0.1.0"
+  },
+  "model_artifact": {
+    "path": "artifacts/model.joblib",
+    "sha256": "b9c069b8fe40f7d905b59a1af6ba2d9c21b1c848daf5c78fbbd50ad94cfe1d2e",
+    "size_bytes": 255973
+  },
+  "dependency_contract": {
+    "python_version": "3.12",
+    "requirements": [
+      "streamlit==1.58.0",
+      "pandas==2.2.3",
+      "numpy==2.1.2",
+      "scikit-learn==1.9.0",
+      "imbalanced-learn==0.14.2",
+      "xgboost==3.3.0",
+      "joblib==1.5.3"
+    ]
+  },
+  "acceptance_checks": {
+    "public_url_manually_opened_in_browser": true,
+    "public_form_submission_manually_completed": true,
+    "public_display_score_matches_expected_rounding": true,
+    "public_alert_decision_confirmed": true,
+    "public_threshold_confirmed": true,
+    "public_model_version_confirmed": true,
+    "model_sha256_matches_frozen_artifact": true,
+    "local_contract_score_matches_frozen_result": true,
+    "streamlit_requirements_match_validated_runtime": true,
+    "python_runtime_selected_as_3_12": true
+  },
+  "deployment_incident": {
+    "initial_runtime": "Python 3.14.6",
+    "symptom": "The first deployment failed while importing the persisted-model dependency chain.",
+    "resolution": "The app was deleted and recreated with Python 3.12, matching the validated local runtime.",
+    "result": "Resolved"
+  },
+  "availability_validation": {
+    "accepted_method": "Manual browser render plus successful public form submission.",
+    "urllib_check": "Not used as an acceptance gate because Streamlit Community Cloud returned repeated HTTP 303 redirects to urllib."
+  },
+  "notes": [
+    "The public demo uses synthetic or non-sensitive inputs only.",
+    "The model score is not presented as a calibrated probability.",
+    "The public demo is a portfolio interface, not a production AML decision system.",
+    "The continuously provisioned Azure ML endpoint remains deleted."
+  ]
+}
